@@ -1,0 +1,7 @@
+.idea
+/conf/config.go
+/tmp
+/tmp_images
+/bindata
+*.exe
+*.exe~

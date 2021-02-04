@@ -1,0 +1,47 @@
+﻿<!DOCTYPE html>
+<html lang="en">
+<head>
+	<meta charset="UTF-8">
+	<title>jQuery多图上传插件可拖拽上传 - 代码库</title>
+	<link rel="stylesheet" type="text/css" href="css/webuploader.css" />
+	<link rel="stylesheet" type="text/css" href="css/style.css" />
+	<style>	.width_auto{width: 900px;margin: 100px auto;}</style>
+</head>
+<!--/************************************************************
+ *																*
+ * 						      代码库							*
+ *                        www.dmaku.com							*
+ *       		  努力创建完善、持续更新插件以及模板			*
+ * 																*
+**************************************************************-->
+<body>
+<div class="width_auto">
+    <div id="container">
+        <!--头部，相册选择和格式选择-->
+        <div id="uploader" >
+
+            <div class="item_container">
+                <div id="" class="queueList" >
+                    <div id="dndArea" class="placeholder">
+                        <div id="filePicker"></div>
+                    </div>
+                </div>
+            </div>
+            <div class="statusBar" style="display:none;">
+                <div class="progress">
+                    <span class="text">0%</span>
+                    <span class="percentage"></span>
+                </div><div class="info"></div>
+                <div class="btns">
+                    <div id="filePicker2"></div><div class="uploadBtn">开始上传</div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+<script src="js/jquery-1.9.min.js"></script>
+<script src="js/webuploader.js"></script>
+<script src="js/jquery.sortable.js"></script>
+<script src="js/upload.js"></script>
+</body>
+</html>
