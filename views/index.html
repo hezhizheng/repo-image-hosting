@@ -3,14 +3,15 @@
 <head>
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1">
-
+    <meta name="referrer" content="never">
     <!-- jQuery
     ====================================================================== -->
     <script src="/static/js/jquery-1.9.min.js"></script>
 
     <!-- Fine Uploader New/Modern CSS file
     ====================================================================== -->
-<!--    <link rel="stylesheet" href="//lib.baomitu.com/twitter-bootstrap/4.5.3/css/bootstrap.min.css">-->
+    <!--    <link rel="stylesheet" href="//lib.baomitu.com/twitter-bootstrap/4.5.3/css/bootstrap.min.css">-->
+    <link href="/static/css/font-awesome.min.css" rel="stylesheet">
     <link href="/static/fineuploader/fine-uploader-new.min.css" rel="stylesheet">
 
     <!-- Fine Uploader jQuery JS file
@@ -53,9 +54,9 @@
                           aria-label="Edit filename"></span>
                     <input class="qq-edit-filename-selector qq-edit-filename" tabindex="0" type="text">
                     <span class="qq-upload-size-selector qq-upload-size"></span>
-                    <button type="button" class="qq-btn qq-upload-cancel-selector qq-upload-cancel">Cancel</button>
-                    <button type="button" class="qq-btn qq-upload-retry-selector qq-upload-retry">Retry</button>
-                    <button type="button" class="qq-btn qq-upload-delete-selector qq-upload-delete">Delete</button>
+                    <button type="button" class="qq-btn qq-upload-cancel-selector qq-upload-cancel">移除</button>
+                    <button type="button" class="qq-btn qq-upload-retry-selector qq-upload-retry">重试</button>
+                    <button type="button" class="qq-btn qq-upload-delete-selector qq-upload-delete">删除</button>
                     <span role="status" class="qq-upload-status-text-selector qq-upload-status-text"></span>
                 </li>
             </ul>
@@ -108,21 +109,41 @@
             width: 60%;
         }
 
-        .gitee-images > li {
+        .li-images > li {
             list-style: none;
             float: left;
-            width: 280px;/*三列图片排列*/
-            height: 300px;/*当图片尺寸不一的时候，设置一个高度*/
-            overflow: hidden;/*超出隐藏*/
-            border: 1px solid #f3b20e;
+            width: 280px; /*三列图片排列*/
+            height: 350px; /*当图片尺寸不一的时候，设置一个高度*/
+            overflow: hidden; /*超出隐藏*/
+            border: 1px solid rgb(255, 153, 0);
             border-radius: 5px;
             margin: 10px 10px;
         }
 
-        .gitee-images > li img {
+        .li-images > li img {
             width: 280px;
             height: 300px;
             object-fit: cover;
+        }
+
+        .li-images i {
+            margin-right: 30px;
+        }
+
+        .li-images i:hover {
+            cursor: pointer;
+        }
+
+        .copy:hover {
+            box-shadow: 8px 8px 13px -8px rgba(255, 153, 0, 0.75);
+            -webkit-box-shadow: 8px 8px 13px -8px rgba(255, 153, 0, 0.75);
+            -moz-box-shadow: 8px 8px 13px -8px rgba(255, 153, 0, 0.75);
+        }
+
+        .delete:hover {
+            box-shadow: 8px 8px 13px -8px red;
+            -webkit-box-shadow: 8px 8px 13px -8px red;
+            -moz-box-shadow: 8px 8px 13px -8px red;
         }
 
     </style>
@@ -141,8 +162,13 @@
 <div id="fine-uploader-manual-trigger"></div>
 
 <div class="gitee-images" align="center">
-    <h3>当前目录下的图片</h3>
+    <h3>{{ .current_dir }} 目录下的图片</h3>
     <ul class="li-images">
+        <li>
+            <img   onerror="handleErrorImg(this)" src="https://gitee.com/static/images/logo-black.svg?t=158106664">
+            <i title="复制图片链接" style="color: rgb(255, 153, 0)" class="fa fa-copy fa-2x copy"></i>
+            <i title="删除" style="color: #d9534f" class="fa fa-trash fa-2x delete"></i>
+        </li>
     </ul>
 </div>
 
@@ -167,20 +193,20 @@
 
         autoUpload: false,
         callbacks: {
-            onDelete: function(id) {
+            onDelete: function (id) {
                 // ...
             },
-            onDeleteComplete: function(id, xhr, isError) {
+            onDeleteComplete: function (id, xhr, isError) {
                 //...
             },
-            onComplete : function (id,filename,res){
-                console.log("onComplete",id,filename,res)
-                $(".li-images").after("<li><img src="+res.data.url+"></li>")
+            onComplete: function (id, filename, res) {
+                console.log("onComplete", id, filename, res)
+                $(".li-images").prepend("<li><img data-img_path="+value.path+" onError=\"handleErrorImg(this)\" src=" + res.data.url + "></li>")
             },
-            onAllComplete:function (success,fail){
-                console.log("onAllComplete",success,fail)
+            onAllComplete: function (success, fail) {
+                console.log("onAllComplete", success, fail)
             },
-            onError: function(id, name, errorReason, xhrOrXdr) {
+            onError: function (id, name, errorReason, xhrOrXdr) {
                 console.log(xhrOrXdr)
                 // alert(qq.format("Error on file number {} - {}.  Reason: {}", id, name, errorReason));
             }
@@ -194,17 +220,36 @@
 
     loadImages()
 
-    function loadImages(){
+    function loadImages() {
         $.ajax({
             url: "/images",
-            type:"GET",
-            data:{},
+            type: "GET",
+            data: {},
             success: function (d) {
-                $.each(d.data.images,function(index,value){
-                    $(".li-images").after("<li><img src="+value.download_url+"></li>")
+                $.each(d.data.images, function (index, value) {
+
+                    // fetch(value.download_url).then(function (response) {
+                    //     console.log(value.download_url,'size:', response.headers.get("content-length"));
+                    // });
+
+
+                    $(".li-images").append("<li><img data-img_path="+value.path+"  onError=\"handleErrorImg(this)\" src=" + value.download_url + "></li>")
                 });
             },
         });
+    }
+
+    function handleErrorImg(t){
+
+        //https://hezhizheng.gitee.io/pictest/
+
+        // 失败的说明图片大于 1M 替换成 gitee 的pages 路径
+
+        if ( $(t).attr('src').indexOf("gitee.io") == -1 ) {
+            var path = "https://" + {{ .owner }} + ".gitee.io/" + {{ .repo }} + "/" + $(t).attr("data-img_path")
+            console.log($(t).attr('src'),"error.........",path);
+            $(t).attr('src',path)
+        }
     }
 
 </script>

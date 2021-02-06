@@ -46,9 +46,9 @@ func ImgUpload(c *gin.Context) {
 
 	PushGiteeUrl := "https://gitee.com/api/v5/repos/" + flag_handle.OWNER + "/" + flag_handle.REPO + "/contents/" + flag_handle.PATH + "/" + file.Filename
 
-	picUrl := services.PushGitee(PushGiteeUrl, string(Base64))
+	picUrl := services.PushGitee(PushGiteeUrl, Base64)
 
-	// 删除临时图片
+	//删除临时图片
 	os.Remove(filename)
 
 	c.JSON(http.StatusOK, gin.H{
