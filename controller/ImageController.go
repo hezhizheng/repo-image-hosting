@@ -7,6 +7,7 @@ import (
 	"net/http"
 	"os"
 	"path"
+	"time"
 )
 
 func ImgUpload(c *gin.Context) {
@@ -29,7 +30,10 @@ func ImgUpload(c *gin.Context) {
 	}
 
 	fileExt := path.Ext(filepath + file.Filename)
-	file.Filename = services.GetRandomString(16) + fileExt
+
+	timeStr := time.Now().Format("20060102150405")
+
+	file.Filename = timeStr + "_" + services.GetRandomString(16) + fileExt
 
 	filename := filepath + file.Filename
 
@@ -46,16 +50,42 @@ func ImgUpload(c *gin.Context) {
 
 	PushGiteeUrl := "https://gitee.com/api/v5/repos/" + flag_handle.OWNER + "/" + flag_handle.REPO + "/contents/" + flag_handle.PATH + "/" + file.Filename
 
-	picUrl := services.PushGitee(PushGiteeUrl, Base64)
+	picUrl, picPath, picSha := services.PushGitee(PushGiteeUrl, Base64)
 
 	//删除临时图片
 	os.Remove(filename)
 
+	if picUrl == "" {
+		c.JSON(http.StatusBadRequest, gin.H{
+			"code":  http.StatusBadRequest,
+			"error": "上传失败，请检查token与其他配置参数是否正确",
+			"data":  map[string]interface{}{},
+		})
+		return
+	}
+
 	c.JSON(http.StatusOK, gin.H{
-		"code":    0,
+		"code":    http.StatusOK,
 		"success": true,
 		"data": map[string]interface{}{
-			"url": picUrl,
+			"url":  picUrl,
+			"sha":  picSha,
+			"path": picPath,
 		},
+	})
+}
+
+func ImageDel(c *gin.Context) {
+	sha := c.PostForm("sha")
+	_path := c.PostForm("path")
+
+	DelGiteeUrl := "https://gitee.com/api/v5/repos/" + flag_handle.OWNER + "/" + flag_handle.REPO + "/contents/" + _path
+
+	services.DelFile(DelGiteeUrl, sha)
+
+	c.JSON(http.StatusOK, gin.H{
+		"code":    http.StatusOK,
+		"success": true,
+		"data":    map[string]interface{}{},
 	})
 }

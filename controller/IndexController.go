@@ -8,9 +8,6 @@ import (
 )
 
 func Index(c *gin.Context) {
-
-	services.ChromedpTest()
-
 	c.HTML(http.StatusOK, "index.html", gin.H{
 		"current_dir": flag_handle.OWNER+"/"+flag_handle.REPO+"/"+flag_handle.PATH,
 		"owner":flag_handle.OWNER,

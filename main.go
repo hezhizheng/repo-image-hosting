@@ -4,6 +4,7 @@ import (
 	"flag"
 	"gitee-image-hosting/routes"
 	"gitee-image-hosting/services/flag_handle"
+	"github.com/gin-gonic/gin"
 	"log"
 )
 
@@ -27,9 +28,12 @@ func init()  {
 }
 
 func main() {
+	// 关闭debug模式
+	gin.SetMode(gin.ReleaseMode)
+
 	port := flag_handle.PORT
 	router := routes.InitRoute()
-	log.Println("监听端口", "http://127.0.0.1:"+port)
+	log.Println("监听端口", "http://127.0.0.1:"+port ," 请不要关闭终端")
 	err := router.Run(":" + port)
 	if err != nil {
 		panic(err)

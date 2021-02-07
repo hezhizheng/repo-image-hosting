@@ -11,6 +11,7 @@ import (
 
 func ImagesToBase64(str_images string) string {
 	f, _ := os.Open(str_images)
+	defer f.Close()
 	// Read entire JPG into byte slice.
 	reader := bufio.NewReader(f)
 	content, _ := ioutil.ReadAll(reader)
