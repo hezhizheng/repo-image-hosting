@@ -17,7 +17,7 @@
 - 复制图片url 、删除图片
 
 ## 使用
-windows用户可直接下载 [releases](https://github.com/hezhizheng/gitee-image-hosting/releases) 文件启动即可，参数说明：
+用户可直接下载 [releases](https://github.com/hezhizheng/gitee-image-hosting/releases) 文件启动即可，参数说明：
 ![](https://gitee.com/hezhizheng/pictest/raw/master/image-hosting/20210207154953_ZHKKGZZVAYDEZHAO.png)
 ```
 完整启动命令： ./gitee-image-hosting.exe -owner hezhizheng -repo pictest -path image-hosting -token xxxtoken -port 2047
@@ -25,7 +25,15 @@ windows用户可直接下载 [releases](https://github.com/hezhizheng/gitee-imag
 ```
 token获取：https://gitee.com/profile/personal_access_tokens/new
 
-其他平台自行编译 `go build`
+自行编译
+```
+gox -osarch="windows/amd64" -ldflags "-s -w"
+
+gox -osarch="darwin/amd64" -ldflags "-s -w"
+
+gox -osarch="linux/amd64" -ldflags "-s -w"
+```
+
 
 
 ## 关于Gitee限制图片大于1M访问的处理方案
