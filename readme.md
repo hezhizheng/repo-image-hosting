@@ -18,7 +18,7 @@
 
 ## 使用
 用户可直接下载 [releases](https://github.com/hezhizheng/gitee-image-hosting/releases) 文件启动即可，参数说明：
-![](https://gitee.com/hezhizheng/pictest/raw/master/image-hosting/20210207154953_ZHKKGZZVAYDEZHAO.png)
+![](https://gitee.com/hezhizheng/pictest/raw/master/image-hosting/20210207175806_BFRWRXKVKRMPXHEA.png)
 
 ```
 ./gitee-image-hosting_windows_amd64.exe -h
