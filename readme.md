@@ -25,7 +25,7 @@ windows用户可直接下载 [release](https://github.com/hezhizheng/gitee-image
 ```
 token获取：https://gitee.com/profile/personal_access_tokens/new
 
-其他品台自行编译 `go build`
+其他平台自行编译 `go build`
 
 
 ## 关于Gitee限制图片大于1M访问的处理方案
