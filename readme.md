@@ -17,7 +17,7 @@
 - 复制图片url 、删除图片
 
 ## 使用
-windows用户可直接下载 [release](https://github.com/hezhizheng/gitee-image-hosting/release) 文件启动即可，参数说明：
+windows用户可直接下载 [releases](https://github.com/hezhizheng/gitee-image-hosting/release) 文件启动即可，参数说明：
 ![](https://gitee.com/hezhizheng/pictest/raw/master/image-hosting/20210207154953_ZHKKGZZVAYDEZHAO.png)
 ```
 完整启动命令： ./gitee-image-hosting.exe -owner hezhizheng -repo pictest -path image-hosting -token xxxtoken -port 2047
