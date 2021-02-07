@@ -36,7 +36,7 @@ Usage of gitee-image-hosting_windows_amd64.exe:
 ```
 
 ```
-完整启动命令： ./gitee-image-hosting.exe -owner hezhizheng -repo pictest -path image-hosting -token xxxtoken -port 2047
+完整启动命令： ./gitee-image-hosting_windows_amd64.exe -owner hezhizheng -repo pictest -path image-hosting -token xxxtoken -port 2047
 实际参数替换成自己的就行
 ```
 token获取：https://gitee.com/profile/personal_access_tokens/new
