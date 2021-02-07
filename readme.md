@@ -19,6 +19,22 @@
 ## 使用
 用户可直接下载 [releases](https://github.com/hezhizheng/gitee-image-hosting/releases) 文件启动即可，参数说明：
 ![](https://gitee.com/hezhizheng/pictest/raw/master/image-hosting/20210207154953_ZHKKGZZVAYDEZHAO.png)
+
+```
+./gitee-image-hosting_windows_amd64.exe -h
+Usage of gitee-image-hosting_windows_amd64.exe:
+  -owner string
+        仓库所属空间地址(企业、组织或个人的地址path) (default "hezhizheng")
+  -path string
+        文件的路径 (default "image-hosting")
+  -port string
+        本地监听的端口 (default "2047")
+  -repo string
+        仓库路径(path) (default "pictest")
+  -token string
+        Gitee 的用户授权码
+```
+
 ```
 完整启动命令： ./gitee-image-hosting.exe -owner hezhizheng -repo pictest -path image-hosting -token xxxtoken -port 2047
 实际参数替换成自己的就行
