@@ -8,7 +8,7 @@
 
 ## 页面
 ![](https://gitee.com/hezhizheng/pictest/raw/master/newdir/20210207160931_ZPUDMEHPYYLWOQFJ.png)
-![](https://img.vim-cn.com/b8/ba7180c764628025bb4153a9c3995bb5ace0c9.gif)
+![](https://cdn.learnku.com/uploads/images/202102/07/6843/8CY2HIkX5x.gif!large)
 
 ## 功能
 - 一键启动，跨平台支持，运行只依赖编译后的二进制文件
