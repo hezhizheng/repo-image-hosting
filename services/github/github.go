@@ -3,8 +3,8 @@ package github
 import (
 	"encoding/json"
 	"fmt"
-	"gitee-image-hosting/services"
-	"gitee-image-hosting/services/flag_handle"
+	"repo-image-hosting/services"
+	"repo-image-hosting/services/flag_handle"
 	"github.com/valyala/fasthttp"
 	"log"
 )

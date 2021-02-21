@@ -2,8 +2,8 @@ package main
 
 import (
 	"flag"
-	"gitee-image-hosting/routes"
-	"gitee-image-hosting/services/flag_handle"
+	"repo-image-hosting/routes"
+	"repo-image-hosting/services/flag_handle"
 	"github.com/gin-gonic/gin"
 	"log"
 )

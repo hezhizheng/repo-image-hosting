@@ -1,4 +1,4 @@
-module gitee-image-hosting
+module repo-image-hosting
 
 go 1.15
 

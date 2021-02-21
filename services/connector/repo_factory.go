@@ -1,9 +1,9 @@
 package connector
 
 import (
-	"gitee-image-hosting/services"
-	"gitee-image-hosting/services/flag_handle"
-	"gitee-image-hosting/services/github"
+	"repo-image-hosting/services"
+	"repo-image-hosting/services/flag_handle"
+	"repo-image-hosting/services/github"
 )
 
 // 定义 serve 的映射关系

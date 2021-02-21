@@ -1,8 +1,8 @@
 package controller
 
 import (
-	"gitee-image-hosting/services"
-	"gitee-image-hosting/services/connector"
+	"repo-image-hosting/services"
+	"repo-image-hosting/services/connector"
 	"github.com/gin-gonic/gin"
 	"net/http"
 	"os"

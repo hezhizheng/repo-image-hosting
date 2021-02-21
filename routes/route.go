@@ -1,8 +1,8 @@
 package routes
 
 import (
-	"gitee-image-hosting/bindata"
-	"gitee-image-hosting/controller"
+	"repo-image-hosting/bindata"
+	"repo-image-hosting/controller"
 	assetfs "github.com/elazarl/go-bindata-assetfs"
 	"github.com/gin-gonic/gin"
 	"html/template"
