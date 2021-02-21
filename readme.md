@@ -43,6 +43,11 @@ token获取：https://gitee.com/profile/personal_access_tokens/new
 
 自行编译
 ```
+// 编译前请先安装 go-bindata ，请参考 https://blog.hi917.com/detail/87.html
+// 执行静态资源编译命令
+go-bindata -o=bindata/bindata.go -pkg=bindata ./static/... ./views/... 
+
+// 跨平台编译
 gox -osarch="windows/amd64" -ldflags "-s -w"
 
 gox -osarch="darwin/amd64" -ldflags "-s -w"

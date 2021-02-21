@@ -10,9 +10,10 @@ import (
 
 func init()  {
 	port := flag.String("port", "2047", "本地监听的端口")
-	token := flag.String("token", "", "Gitee 的用户授权码")
+	platform := flag.String("platform", "github", "平台名称，支持gitee/github")
+	token := flag.String("token", "", "Gitee/Github 的用户授权码")
 	owner := flag.String("owner", "hezhizheng", "仓库所属空间地址(企业、组织或个人的地址path)")
-	repo := flag.String("repo", "pictest", "仓库路径(path)")
+	repo := flag.String("repo", "static-image-hosting", "仓库路径(path)")
 	path := flag.String("path", "image-hosting", "文件的路径")
 	flag.Parse()
 	flag_handle.PORT = *port
@@ -20,6 +21,7 @@ func init()  {
 	flag_handle.REPO = *repo
 	flag_handle.PATH = *path
 	flag_handle.TOKEN = *token
+	flag_handle.PLATFORM = *platform
 
 	if flag_handle.TOKEN == "" {
 		panic("token 必须！")

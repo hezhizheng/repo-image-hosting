@@ -1,35 +1,39 @@
-package services
+package github
 
 import (
 	"encoding/json"
 	"fmt"
+	"gitee-image-hosting/services"
 	"gitee-image-hosting/services/flag_handle"
 	"github.com/valyala/fasthttp"
 	"log"
 )
 
-
-type GiteeServe struct {
-	RepoInterface
+type GithubServe struct {
+	services.RepoInterface
 }
 
-func (serve *GiteeServe) Push(filename, content string) (string,string,string) {
-	return PushGitee(filename, content)
+func (serve *GithubServe) Push(filename, content string) (string, string, string) {
+	return Push(filename, content)
 }
 
-func (serve *GiteeServe) GetFiles() []map[string]interface{} {
-	return GetGiteeFiles()
+func (serve *GithubServe) GetFiles() []map[string]interface{} {
+	return GetFiles()
 }
 
-func (serve *GiteeServe) Del(filepath, sha string) string {
+func (serve *GithubServe) Del(filepath, sha string) string {
 	return DelFile(filepath, sha)
 }
 
-func PushGitee(filename, content string) (string,string,string) {
+func Push(filename, content string) (string, string, string) {
 
-	url := "https://gitee.com/api/v5/repos/" + flag_handle.OWNER + "/" + flag_handle.REPO + "/contents/" + flag_handle.PATH + "/" + filename
+	url := "https://api.github.com/repos/" +
+		flag_handle.OWNER + "/" +
+		flag_handle.REPO +
+		"/contents/" +
+		flag_handle.PATH +
+		"/" + filename + "?access_token=" + flag_handle.TOKEN
 
-	// 初始化请求与响应
 	req := fasthttp.AcquireRequest()
 	resp := fasthttp.AcquireResponse()
 	defer func() {
@@ -39,14 +43,14 @@ func PushGitee(filename, content string) (string,string,string) {
 	}()
 
 	// 设置请求方法
-	req.Header.SetMethod("POST")
+	req.Header.SetMethod("PUT")
 	req.Header.SetBytesKV([]byte("Content-Type"), []byte("application/json"))
+	req.Header.SetBytesKV([]byte("Accept"), []byte("application/vnd.github.v3+json"))
 
 	// 设置请求的目标网址
 	req.SetRequestURI(url)
 
 	args := make(map[string]string)
-	args["access_token"] = flag_handle.TOKEN
 	args["content"] = content
 	args["message"] = "upload pic for repo-image-hosting"
 
@@ -76,20 +80,25 @@ func PushGitee(filename, content string) (string,string,string) {
 
 	if ok {
 		if mapResult["content"] != nil {
-			d = mapResult["content"].(map[string]interface{})["download_url"].(string)
-			p = mapResult["content"].(map[string]interface{})["path"].(string)
+			path := mapResult["content"].(map[string]interface{})["path"].(string)
+			d = "https://cdn.jsdelivr.net/gh/"+ flag_handle.OWNER + "/" +flag_handle.REPO + "@master/" + path
+			p = path
 			s = mapResult["content"].(map[string]interface{})["sha"].(string)
 		}
 	}
 
-	return d,p,s
+	return d, p, s
 }
 
-func GetGiteeFiles() []map[string]interface{} {
-
-	url := "https://gitee.com/api/v5/repos/"+flag_handle.OWNER+"/"+flag_handle.REPO+"/contents/"+flag_handle.PATH+"?access_token="+flag_handle.TOKEN
-
+func GetFiles() []map[string]interface{} {
 	// 初始化请求与响应
+	url := "https://api.github.com/repos/" +
+		flag_handle.OWNER + "/" +
+		flag_handle.REPO +
+		"/contents/" +
+		flag_handle.PATH +
+		"?access_token=" + flag_handle.TOKEN
+
 	req := fasthttp.AcquireRequest()
 	resp := fasthttp.AcquireResponse()
 	defer func() {
@@ -100,6 +109,7 @@ func GetGiteeFiles() []map[string]interface{} {
 
 	// 设置请求方法
 	req.Header.SetMethod("GET")
+	req.Header.SetBytesKV([]byte("Accept"), []byte("application/vnd.github.v3+json"))
 	// 设置请求的目标网址
 	req.SetRequestURI(url)
 
@@ -111,6 +121,8 @@ func GetGiteeFiles() []map[string]interface{} {
 	// 获取响应的数据实体
 	body := resp.Body()
 
+	// log.Println(string(body),url)
+
 	var mapResult []map[string]interface{}
 
 	err := json.Unmarshal(body, &mapResult)
@@ -118,17 +130,21 @@ func GetGiteeFiles() []map[string]interface{} {
 		fmt.Println("JsonToMapDemo err: ", err)
 	}
 
+	for _, v := range mapResult{
+		v["download_url"] = "https://cdn.jsdelivr.net/gh/"+ flag_handle.OWNER + "/" +flag_handle.REPO + "@master/" + v["path"].(string)
+	}
 	return mapResult
 }
 
-func DelFile(filepath,sha string) string {
-
-	url := "https://gitee.com/api/v5/repos/" + flag_handle.OWNER + "/" + flag_handle.REPO + "/contents/" + filepath
-
+func DelFile(filepath, sha string) string {
 	// 初始化请求与响应
+	url := "https://api.github.com/repos/" +
+		flag_handle.OWNER + "/" +
+		flag_handle.REPO +
+		"/contents/" + filepath + "?access_token=" + flag_handle.TOKEN
+
 	req := fasthttp.AcquireRequest()
 	resp := fasthttp.AcquireResponse()
-
 	defer func() {
 		// 用完需要释放资源
 		fasthttp.ReleaseResponse(resp)
@@ -138,12 +154,12 @@ func DelFile(filepath,sha string) string {
 	// 设置请求方法
 	req.Header.SetMethod("DELETE")
 	req.Header.SetBytesKV([]byte("Content-Type"), []byte("application/json"))
+	req.Header.SetBytesKV([]byte("Accept"), []byte("application/vnd.github.v3+json"))
 
 	// 设置请求的目标网址
 	req.SetRequestURI(url)
 
 	args := make(map[string]string)
-	args["access_token"] = flag_handle.TOKEN
 	args["sha"] = sha
 	args["message"] = "delete pic for repo-image-hosting"
 

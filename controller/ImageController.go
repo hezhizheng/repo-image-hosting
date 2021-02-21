@@ -2,7 +2,7 @@ package controller
 
 import (
 	"gitee-image-hosting/services"
-	"gitee-image-hosting/services/flag_handle"
+	"gitee-image-hosting/services/connector"
 	"github.com/gin-gonic/gin"
 	"net/http"
 	"os"
@@ -48,9 +48,7 @@ func ImgUpload(c *gin.Context) {
 
 	Base64 := services.ImagesToBase64(filename)
 
-	PushGiteeUrl := "https://gitee.com/api/v5/repos/" + flag_handle.OWNER + "/" + flag_handle.REPO + "/contents/" + flag_handle.PATH + "/" + file.Filename
-
-	picUrl, picPath, picSha := services.PushGitee(PushGiteeUrl, Base64)
+	picUrl, picPath, picSha := connector.RepoCreate().Push(file.Filename,Base64)
 
 	//删除临时图片
 	os.Remove(filename)
@@ -79,9 +77,7 @@ func ImageDel(c *gin.Context) {
 	sha := c.PostForm("sha")
 	_path := c.PostForm("path")
 
-	DelGiteeUrl := "https://gitee.com/api/v5/repos/" + flag_handle.OWNER + "/" + flag_handle.REPO + "/contents/" + _path
-
-	services.DelFile(DelGiteeUrl, sha)
+	connector.RepoCreate().Del(_path,sha)
 
 	c.JSON(http.StatusOK, gin.H{
 		"code":    http.StatusOK,

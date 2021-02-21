@@ -151,7 +151,7 @@
 
     </style>
 
-    <title>Gitee-Image-Hosting 😎</title>
+    <title>Repo-Image-Hosting 😎</title>
 </head>
 <body>
 
@@ -166,7 +166,7 @@
 <div align="center" class="">
     <h1>
         <a href="https://hzz.cool" target="_blank" style="text-decoration:none;color: rgb(255, 153, 0)">
-            Gitee-Image-Hosting 🐽
+            Repo-Image-Hosting 🐽
         </a>
     </h1>
 </div>
@@ -176,7 +176,7 @@
 <div id="fine-uploader-manual-trigger"></div>
 
 <div class="gitee-images" align="center">
-    <h3>{{ .current_dir }} 目录下的图片</h3>
+    <h3><span style="color: rgb(255, 153, 0)">{{ .platform }}</span> ：{{ .current_dir }} 目录下的图片</h3>
     <ul class="li-images">
 <!--        <li>-->
 <!--            <img onerror="handleErrorImg(this)" src="https://gitee.com/static/images/logo-black.svg?t=158106664">-->
@@ -251,7 +251,8 @@
 
                 if ( d.data.images == null )
                 {
-                    alert("token配置有误，请检查")
+                    //alert("token配置有误，请检查")
+                    console.log("配置错误，或当前目录不存在")
                     return false;
                 }
 

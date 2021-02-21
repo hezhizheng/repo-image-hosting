@@ -6,4 +6,5 @@ var (
 	REPO = ""
 	PATH = ""
 	TOKEN = ""
+	PLATFORM = ""
 )
