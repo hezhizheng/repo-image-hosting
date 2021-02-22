@@ -21,7 +21,7 @@ Github 也行，可以用jsdelivr加速
 - 复制图片url 、删除图片
 
 ## 使用
-用户可直接下载 [releases](https://github.com/hezhizheng/gitee-image-hosting/releases) 文件启动即可，参数说明：
+用户可直接下载 [releases](https://github.com/hezhizheng/repo-image-hosting/releases) 文件启动即可，参数说明：
 ![](https://cdn.jsdelivr.net/gh/hezhizheng/static-image-hosting@master/image-hosting/20210222093638_VUQZUKNZGAXXSXJI.png)
 
 ```
