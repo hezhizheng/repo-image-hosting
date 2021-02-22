@@ -42,7 +42,7 @@ Usage of D:\phpstudy_pro\WWW\org\gitee-image-hosting\repo-image-hosting_windows_
 ```
 
 ```
-完整启动命令： ./gitee-image-hosting_windows_amd64.exe -platform github -owner hezhizheng -repo pictest -path image-hosting -token xxxtoken -port 2047
+完整启动命令： ./repo-image-hosting_windows_amd64.exe -platform github -owner hezhizheng -repo static-image-hosting -path image-hosting -token xxxtoken -port 2047
 实际参数替换成自己的就行
 ```
 
