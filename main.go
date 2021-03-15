@@ -2,10 +2,12 @@ package main
 
 import (
 	"flag"
+	"os/exec"
 	"repo-image-hosting/routes"
 	"repo-image-hosting/services/flag_handle"
 	"github.com/gin-gonic/gin"
 	"log"
+	"runtime"
 )
 
 func init()  {
@@ -35,7 +37,18 @@ func main() {
 
 	port := flag_handle.PORT
 	router := routes.InitRoute()
-	log.Println("监听端口", "http://127.0.0.1:"+port ," 请不要关闭终端")
+
+	link := "http://127.0.0.1:"+port
+	log.Println("监听端口", link ," 请不要关闭终端")
+	// 调用浏览器打开网页
+	if runtime.GOOS == "windows" {
+		exec.Command("cmd","/c","start", link).CombinedOutput()
+	} else {
+		// 没有测试环境，暂时不实现
+		//exec.Command("open", link).CombinedOutput() // macos
+		//exec.Command("x-www-browser", link).CombinedOutput() // linux
+	}
+
 	err := router.Run(":" + port)
 	if err != nil {
 		panic(err)
