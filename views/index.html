@@ -19,6 +19,7 @@
     ====================================================================== -->
     <script src="/static/fineuploader/jquery.fine-uploader.min.js"></script>
     <script src="/static/js/clipboard.min.js"></script>
+    <script src="/static/js/text-image.js"></script>
 
     <!-- Fine Uploader Thumbnails template w/ customization
     ====================================================================== -->
@@ -186,7 +187,6 @@
     </ul>
 </div>
 
-
 <!-- Your code to create an instance of Fine Uploader and bind to the DOM/template
 ====================================================================== -->
 <script>
@@ -202,7 +202,7 @@
             }
         },
         validation: {
-            allowedExtensions: ['jpeg', 'jpg', 'gif', 'png', 'svg']
+            //allowedExtensions: ['jpeg', 'jpg', 'gif', 'png', 'svg']
         },
 
         autoUpload: false,
@@ -272,12 +272,28 @@
     function handleErrorImg(t){
         //https://hezhizheng.gitee.io/pictest/
         // 加载失败的说明 图片大于 1M， 替换成 gitee 的pages 路径
-        if ( $(t).attr('src').indexOf("gitee.io") == -1 ) {
+        if ( $(t).attr('src').indexOf("gitee.io") == -1 && $(t).attr('src').indexOf("cdn.jsdelivr.net") == -1) {
             var path = "https://" + {{ .owner }} + ".gitee.io/" + {{ .repo }} + "/" + $(t).attr("data-img_path")
             // console.log($(t).attr('src'),"error.........",path);
             $(t).attr('src',path)
             $(t).next().attr('data-clipboard-text',path)
         }
+
+        // 未支持展示的文件类型
+        var style = {
+            font: 'serif',
+            align: 'center',
+            color: 'rgba(0, 0, 0, 1)',
+            size: 28,
+            background: 'rgb(255, 153, 0)',
+            stroke: 1,
+            strokeColor: 'rgba(0, 0, 0, 1)',
+            lineHeight: "280px",
+        };
+
+        let textImage = TextImage(style);
+        let img = textImage.toDataURL("未支持展示的文件类型\n"+$(t).attr("data-img_path"));
+        $(t).attr('src',img)
     }
 
     function handleDel(t)
