@@ -20,6 +20,7 @@
     <script src="/static/fineuploader/jquery.fine-uploader.min.js"></script>
     <script src="/static/js/clipboard.min.js"></script>
     <script src="/static/js/text-image.js"></script>
+    <script src="/static/js/layer/layer.js"></script>
 
     <!-- Fine Uploader Thumbnails template w/ customization
     ====================================================================== -->
@@ -242,17 +243,27 @@
 
     loadImages()
 
+    var loding = layer.msg('数据加载中...', {
+        icon: 16
+        ,shade: 0.01
+        ,time: 0
+    });
+
     function loadImages() {
         $.ajax({
             url: "/images",
             type: "GET",
             data: {},
+            beforeSend:function (){
+                loding
+            },
             success: function (d) {
 
                 if ( d.data.images == null )
                 {
                     //alert("token配置有误，请检查")
-                    console.log("配置错误，或当前目录不存在")
+                    //console.log("配置错误，或当前目录不存在")
+                    layer.msg("配置错误，或当前目录不存在",{time: 2000})
                     return false;
                 }
 
@@ -266,6 +277,9 @@
                     )
                 });
             },
+            complete: function(){
+                layer.close(loding);
+            }
         });
     }
 
@@ -298,7 +312,7 @@
 
     function handleDel(t)
     {
-        if(confirm('删除这张图？')){
+        layer.confirm("是否删除？", { title:'提示'}, function(index){
             $.ajax({
                 url: "/delete",
                 type: "POST",
@@ -309,21 +323,25 @@
                 success: function (d) {
                     if (d.code == 200){
                         $(t).parent().remove()
+                        layer.msg("已删除",{time: 1500})
                     }else{
-                        alert("删除失败")
+                        layer.msg("删除失败")
+                        return false;
                     }
                 },
             });
-        }
-    }
-
-    function handleCopy(t)
-    {
-        // noting
+            layer.close(index);
+        },function (){ // 取消操作
+            //console.log("取消操作")
+        });
     }
 
     new ClipboardJS('.copy');
 
+    function handleCopy(t)
+    {
+        layer.msg("链接 "+$(t).attr("data-img_url")+" 已复制成功",{time: 1500})
+    }
 </script>
 </body>
 </html>

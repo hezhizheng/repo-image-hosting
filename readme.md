@@ -57,11 +57,11 @@ token获取(github)：https://github.com/settings/tokens/new
 go-bindata -o=bindata/bindata.go -pkg=bindata ./static/... ./views/... 
 
 // 跨平台编译
-gox -osarch="windows/amd64" -ldflags "-s -w"
+gox -osarch="windows/amd64" -ldflags "-s -w" -gcflags="all=-trimpath=${PWD}" -asmflags="all=-trimpath=${PWD}"
 
-gox -osarch="darwin/amd64" -ldflags "-s -w"
+gox -osarch="darwin/amd64" -ldflags "-s -w" -gcflags="all=-trimpath=${PWD}" -asmflags="all=-trimpath=${PWD}"
 
-gox -osarch="linux/amd64" -ldflags "-s -w"
+gox -osarch="linux/amd64" -ldflags "-s -w" -gcflags="all=-trimpath=${PWD}" -asmflags="all=-trimpath=${PWD}"
 ```
 
 
