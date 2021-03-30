@@ -8,7 +8,7 @@ Github 也行，可以用jsdelivr加速
 ```
 
 ## 页面
-![](https://gitee.com/hezhizheng/pictest/raw/master/newdir/20210207160931_ZPUDMEHPYYLWOQFJ.png)
+![](https://cdn.learnku.com/uploads/images/202102/07/6843/crh7ytVwiz.png)
 ![](https://cdn.learnku.com/uploads/images/202102/07/6843/8CY2HIkX5x.gif!large)
 
 ## 功能
