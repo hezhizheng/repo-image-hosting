@@ -7,6 +7,8 @@
 Github 也行，可以用jsdelivr加速
 ```
 
+> PHP composer 包：[repo-storage](https://github.com/hezhizheng/repo-storage)
+
 ## 页面
 ![](https://cdn.learnku.com/uploads/images/202102/07/6843/crh7ytVwiz.png)
 ![](https://cdn.learnku.com/uploads/images/202102/07/6843/8CY2HIkX5x.gif!large)
