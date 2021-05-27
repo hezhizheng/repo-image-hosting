@@ -49,6 +49,7 @@ func PushGitee(filename, content string) (string,string,string) {
 	args["access_token"] = flag_handle.TOKEN
 	args["content"] = content
 	args["message"] = "upload pic for repo-image-hosting"
+	args["branch"] = flag_handle.BRANCH
 
 	jsonBytes, _ := json.Marshal(args)
 	req.SetBodyRaw(jsonBytes)
@@ -87,7 +88,13 @@ func PushGitee(filename, content string) (string,string,string) {
 
 func GetGiteeFiles() []map[string]interface{} {
 
-	url := "https://gitee.com/api/v5/repos/"+flag_handle.OWNER+"/"+flag_handle.REPO+"/contents/"+flag_handle.PATH+"?access_token="+flag_handle.TOKEN
+	url := "https://gitee.com/api/v5/repos/"+
+		flag_handle.OWNER+"/"+
+		flag_handle.REPO+
+		"/contents/"+
+		flag_handle.PATH+
+		"?access_token="+
+		flag_handle.TOKEN+"&ref="+flag_handle.BRANCH
 
 	// 初始化请求与响应
 	req := fasthttp.AcquireRequest()
@@ -146,6 +153,7 @@ func DelFile(filepath,sha string) string {
 	args["access_token"] = flag_handle.TOKEN
 	args["sha"] = sha
 	args["message"] = "delete pic for repo-image-hosting"
+	args["branch"] = flag_handle.BRANCH
 
 	jsonBytes, _ := json.Marshal(args)
 	req.SetBodyRaw(jsonBytes)

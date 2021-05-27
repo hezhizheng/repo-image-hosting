@@ -15,8 +15,7 @@ Github 也行，可以用jsdelivr加速
 
 ## 功能
 - 支持使用 Github / Gitee 作为图床工具
-- github 使用 jsdelivr 加速 
-- 支持gitee图片大于1M的显示(PS：需要手动启动/部署gitee的pages服务)   
+- github 使用 jsdelivr 加速
 - 一键启动，跨平台支持，运行只依赖编译后的二进制文件
 - 可视化web操作界面(PS: 页面有点丑，不影响操作......)
 - 多图上传，不限制图片类型
@@ -50,7 +49,11 @@ Usage of D:\phpstudy_pro\WWW\org\gitee-image-hosting\repo-image-hosting_windows_
 
 token获取(gitee)：https://gitee.com/profile/personal_access_tokens/new
 
+gitee API 文档：https://gitee.com/api/v5/swagger#/getV5ReposOwnerRepoContents(Path)
+
 token获取(github)：https://github.com/settings/tokens/new
+
+github API 文档：https://docs.github.com/cn/rest/reference/repos#custom-media-types-for-repository-contents
 
 自行编译
 ```
@@ -69,7 +72,7 @@ gox -osarch="linux/amd64" -ldflags "-s -w" -gcflags="all=-trimpath=${PWD}" -asmf
 
 ## 关于Gitee限制图片大于1M访问的处理方案
 - 使用第三方图片压缩工具进行压缩，之后再进行上传。推荐 [compressjpeg](https://compressjpeg.com/zh/)
-- 启用Gitee的pages功能(非付费用户上传图片之后需要手动进行pages服务的部署)，程序会自动替换pages域名进行图片的展示。
+- 启用Gitee的pages功能(非付费用户上传图片之后需要手动进行pages服务的部署)，需要替换域名为pages的域名。
 
 
 ## License

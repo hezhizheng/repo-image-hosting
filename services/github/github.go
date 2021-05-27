@@ -53,6 +53,7 @@ func Push(filename, content string) (string, string, string) {
 	args := make(map[string]string)
 	args["content"] = content
 	args["message"] = "upload pic for repo-image-hosting"
+	args["branch"] = flag_handle.BRANCH
 
 	jsonBytes, _ := json.Marshal(args)
 	req.SetBodyRaw(jsonBytes)
@@ -81,7 +82,7 @@ func Push(filename, content string) (string, string, string) {
 	if ok {
 		if mapResult["content"] != nil {
 			path := mapResult["content"].(map[string]interface{})["path"].(string)
-			d = "https://cdn.jsdelivr.net/gh/"+ flag_handle.OWNER + "/" +flag_handle.REPO + "@master/" + path
+			d = "https://cdn.jsdelivr.net/gh/"+ flag_handle.OWNER + "/" +flag_handle.REPO + "@"+flag_handle.BRANCH+"/" + path
 			p = path
 			s = mapResult["content"].(map[string]interface{})["sha"].(string)
 		}
@@ -97,7 +98,7 @@ func GetFiles() []map[string]interface{} {
 		flag_handle.REPO +
 		"/contents/" +
 		flag_handle.PATH +
-		"?access_token=" + flag_handle.TOKEN
+		"?access_token=" + flag_handle.TOKEN + "&ref=" + flag_handle.BRANCH
 
 	req := fasthttp.AcquireRequest()
 	resp := fasthttp.AcquireResponse()
@@ -162,6 +163,7 @@ func DelFile(filepath, sha string) string {
 	args := make(map[string]string)
 	args["sha"] = sha
 	args["message"] = "delete pic for repo-image-hosting"
+	args["branch"] = flag_handle.BRANCH
 
 	jsonBytes, _ := json.Marshal(args)
 	req.SetBodyRaw(jsonBytes)

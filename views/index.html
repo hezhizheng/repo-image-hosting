@@ -178,7 +178,7 @@
 <div id="fine-uploader-manual-trigger"></div>
 
 <div class="gitee-images" align="center">
-    <h3><span style="color: rgb(255, 153, 0)">{{ .platform }}</span> ：{{ .current_dir }} 目录下的图片</h3>
+    <h3><span style="color: rgb(255, 153, 0)">{{ .platform }}</span> ：{{ .current_dir }} 目录下的文件</h3>
     <ul class="li-images">
 <!--        <li>-->
 <!--            <img onerror="handleErrorImg(this)" src="https://gitee.com/static/images/logo-black.svg?t=158106664">-->
@@ -286,12 +286,12 @@
     function handleErrorImg(t){
         //https://hezhizheng.gitee.io/pictest/
         // 加载失败的说明 图片大于 1M， 替换成 gitee 的pages 路径
-        if ( $(t).attr('src').indexOf("gitee.io") == -1 && $(t).attr('src').indexOf("cdn.jsdelivr.net") == -1) {
-            var path = "https://" + {{ .owner }} + ".gitee.io/" + {{ .repo }} + "/" + $(t).attr("data-img_path")
-            // console.log($(t).attr('src'),"error.........",path);
-            $(t).attr('src',path)
-            $(t).next().attr('data-clipboard-text',path)
-        }
+        // if ( $(t).attr('src').indexOf("gitee.io") == -1 && $(t).attr('src').indexOf("cdn.jsdelivr.net") == -1) {
+        //     var path = "https://" + {{ .owner }} + ".gitee.io/" + {{ .repo }} + "/" + $(t).attr("data-img_path")
+        //     // console.log($(t).attr('src'),"error.........",path);
+        //     $(t).attr('src',path)
+        //     $(t).next().attr('data-clipboard-text',path)
+        // }
 
         // 未支持展示的文件类型
         var style = {

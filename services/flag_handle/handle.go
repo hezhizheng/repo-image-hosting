@@ -7,4 +7,5 @@ var (
 	PATH = ""
 	TOKEN = ""
 	PLATFORM = ""
+	BRANCH = ""
 )
