@@ -132,7 +132,7 @@ func GetFiles() []map[string]interface{} {
 	}
 
 	for _, v := range mapResult{
-		v["download_url"] = "https://cdn.jsdelivr.net/gh/"+ flag_handle.OWNER + "/" +flag_handle.REPO + "@master/" + v["path"].(string)
+		v["download_url"] = "https://cdn.jsdelivr.net/gh/"+ flag_handle.OWNER + "/" +flag_handle.REPO + "@"+flag_handle.BRANCH+"/" + v["path"].(string)
 	}
 	return mapResult
 }
