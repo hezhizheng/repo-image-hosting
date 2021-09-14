@@ -3,10 +3,10 @@ package github
 import (
 	"encoding/json"
 	"fmt"
-	"repo-image-hosting/services"
-	"repo-image-hosting/services/flag_handle"
 	"github.com/valyala/fasthttp"
 	"log"
+	"repo-image-hosting/services"
+	"repo-image-hosting/services/flag_handle"
 )
 
 type GithubServe struct {
@@ -32,7 +32,7 @@ func Push(filename, content string) (string, string, string) {
 		flag_handle.REPO +
 		"/contents/" +
 		flag_handle.PATH +
-		"/" + filename + "?access_token=" + flag_handle.TOKEN
+		"/" + filename
 
 	req := fasthttp.AcquireRequest()
 	resp := fasthttp.AcquireResponse()
@@ -46,6 +46,7 @@ func Push(filename, content string) (string, string, string) {
 	req.Header.SetMethod("PUT")
 	req.Header.SetBytesKV([]byte("Content-Type"), []byte("application/json"))
 	req.Header.SetBytesKV([]byte("Accept"), []byte("application/vnd.github.v3+json"))
+	req.Header.SetBytesKV([]byte("Authorization"), []byte("token "+flag_handle.TOKEN))
 
 	// 设置请求的目标网址
 	req.SetRequestURI(url)
@@ -98,7 +99,7 @@ func GetFiles() []map[string]interface{} {
 		flag_handle.REPO +
 		"/contents/" +
 		flag_handle.PATH +
-		"?access_token=" + flag_handle.TOKEN + "&ref=" + flag_handle.BRANCH
+		"?ref=" + flag_handle.BRANCH
 
 	req := fasthttp.AcquireRequest()
 	resp := fasthttp.AcquireResponse()
@@ -111,6 +112,7 @@ func GetFiles() []map[string]interface{} {
 	// 设置请求方法
 	req.Header.SetMethod("GET")
 	req.Header.SetBytesKV([]byte("Accept"), []byte("application/vnd.github.v3+json"))
+	req.Header.SetBytesKV([]byte("Authorization"), []byte("token "+flag_handle.TOKEN))
 	// 设置请求的目标网址
 	req.SetRequestURI(url)
 
@@ -122,7 +124,7 @@ func GetFiles() []map[string]interface{} {
 	// 获取响应的数据实体
 	body := resp.Body()
 
-	// log.Println(string(body),url)
+	//log.Println(string(body),url)
 
 	var mapResult []map[string]interface{}
 
@@ -142,7 +144,7 @@ func DelFile(filepath, sha string) string {
 	url := "https://api.github.com/repos/" +
 		flag_handle.OWNER + "/" +
 		flag_handle.REPO +
-		"/contents/" + filepath + "?access_token=" + flag_handle.TOKEN
+		"/contents/" + filepath
 
 	req := fasthttp.AcquireRequest()
 	resp := fasthttp.AcquireResponse()
@@ -156,6 +158,7 @@ func DelFile(filepath, sha string) string {
 	req.Header.SetMethod("DELETE")
 	req.Header.SetBytesKV([]byte("Content-Type"), []byte("application/json"))
 	req.Header.SetBytesKV([]byte("Accept"), []byte("application/vnd.github.v3+json"))
+	req.Header.SetBytesKV([]byte("Authorization"), []byte("token "+flag_handle.TOKEN))
 
 	// 设置请求的目标网址
 	req.SetRequestURI(url)
