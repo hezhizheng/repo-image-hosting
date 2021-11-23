@@ -58,10 +58,6 @@ github API 文档：https://docs.github.com/cn/rest/reference/repos#custom-media
 
 自行编译
 ```
-// 编译前请先安装 go-bindata ，请参考 https://blog.hi917.com/detail/87.html
-// 执行静态资源编译命令（每次修改静态文件都需要执行）
-go-bindata -o=bindata/bindata.go -pkg=bindata ./static/... ./views/... 
-
 // 跨平台编译
 gox -osarch="windows/amd64" -ldflags "-s -w" -gcflags="all=-trimpath=${PWD}" -asmflags="all=-trimpath=${PWD}"
 
