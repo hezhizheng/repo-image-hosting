@@ -55,4 +55,6 @@ func main() {
 	if err != nil {
 		panic(err)
 	}
+
+	_ = port
 }
