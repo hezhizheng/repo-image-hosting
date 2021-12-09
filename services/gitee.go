@@ -3,7 +3,7 @@ package services
 import (
 	"encoding/json"
 	"fmt"
-	"repo-image-hosting/services/flag_handle"
+	"hezhiheng/repo-image-hosting/services/flag_handle"
 	"github.com/valyala/fasthttp"
 	"log"
 )

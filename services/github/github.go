@@ -5,8 +5,8 @@ import (
 	"fmt"
 	"github.com/valyala/fasthttp"
 	"log"
-	"repo-image-hosting/services"
-	"repo-image-hosting/services/flag_handle"
+	"hezhiheng/repo-image-hosting/services"
+	"hezhiheng/repo-image-hosting/services/flag_handle"
 )
 
 type GithubServe struct {

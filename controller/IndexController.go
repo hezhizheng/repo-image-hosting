@@ -1,8 +1,8 @@
 package controller
 
 import (
-	"repo-image-hosting/services/connector"
-	"repo-image-hosting/services/flag_handle"
+	"hezhiheng/repo-image-hosting/services/connector"
+	"hezhiheng/repo-image-hosting/services/flag_handle"
 	"github.com/gin-gonic/gin"
 	"net/http"
 )

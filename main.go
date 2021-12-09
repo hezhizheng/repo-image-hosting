@@ -2,11 +2,11 @@ package main
 
 import (
 	"flag"
-	"os/exec"
-	"repo-image-hosting/routes"
-	"repo-image-hosting/services/flag_handle"
 	"github.com/gin-gonic/gin"
+	"hezhiheng/repo-image-hosting/routes"
+	"hezhiheng/repo-image-hosting/services/flag_handle"
 	"log"
+	"os/exec"
 	"runtime"
 )
 

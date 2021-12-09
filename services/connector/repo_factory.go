@@ -1,9 +1,9 @@
 package connector
 
 import (
-	"repo-image-hosting/services"
-	"repo-image-hosting/services/flag_handle"
-	"repo-image-hosting/services/github"
+	"hezhiheng/repo-image-hosting/services"
+	"hezhiheng/repo-image-hosting/services/flag_handle"
+	"hezhiheng/repo-image-hosting/services/github"
 )
 
 // 定义 serve 的映射关系

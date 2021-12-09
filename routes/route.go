@@ -3,9 +3,9 @@ package routes
 import (
 	"github.com/gin-gonic/gin"
 	"net/http"
-	"repo-image-hosting/controller"
-	"repo-image-hosting/static"
-	"repo-image-hosting/views"
+	"hezhiheng/repo-image-hosting/controller"
+	"hezhiheng/repo-image-hosting/static"
+	"hezhiheng/repo-image-hosting/views"
 )
 
 func InitRoute() *gin.Engine {
