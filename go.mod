@@ -1,4 +1,4 @@
-module repo-image-hosting
+module hezhizheng/repo-image-hosting
 
 go 1.16
 
