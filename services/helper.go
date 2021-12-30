@@ -1,20 +1,15 @@
 package services
 
 import (
-	"bufio"
 	"encoding/base64"
-	"io/ioutil"
 	"math/rand"
 	"os"
 	"time"
 )
 
 func ImagesToBase64(str_images string) string {
-	f, _ := os.Open(str_images)
-	defer f.Close()
 	// Read entire JPG into byte slice.
-	reader := bufio.NewReader(f)
-	content, _ := ioutil.ReadAll(reader)
+	content, _ := os.ReadFile(str_images)
 	// Encode as base64.
 	encoded := base64.StdEncoding.EncodeToString(content)
 	return encoded
@@ -29,5 +24,3 @@ func GetRandomString(n int) string {
 	}
 	return string(bytes)
 }
-
-

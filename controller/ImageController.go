@@ -2,8 +2,8 @@ package controller
 
 import (
 	"github.com/gin-gonic/gin"
-	"hezhiheng/repo-image-hosting/services"
-	"hezhiheng/repo-image-hosting/services/connector"
+	"hezhizheng/repo-image-hosting/services"
+	"hezhizheng/repo-image-hosting/services/connector"
 	"net/http"
 	"os"
 	"path"
@@ -48,7 +48,7 @@ func ImgUpload(c *gin.Context) {
 
 	Base64 := services.ImagesToBase64(filename)
 
-	picUrl, picPath, picSha := connector.RepoCreate().Push(file.Filename,Base64)
+	picUrl, picPath, picSha := connector.RepoCreate().Push(file.Filename, Base64)
 
 	//删除临时图片
 	os.Remove(filename)
@@ -77,7 +77,7 @@ func ImageDel(c *gin.Context) {
 	sha := c.PostForm("sha")
 	_path := c.PostForm("path")
 
-	connector.RepoCreate().Del(_path,sha)
+	connector.RepoCreate().Del(_path, sha)
 
 	c.JSON(http.StatusOK, gin.H{
 		"code":    http.StatusOK,

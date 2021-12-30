@@ -3,14 +3,14 @@ package main
 import (
 	"flag"
 	"github.com/gin-gonic/gin"
-	"hezhiheng/repo-image-hosting/routes"
-	"hezhiheng/repo-image-hosting/services/flag_handle"
+	"hezhizheng/repo-image-hosting/routes"
+	"hezhizheng/repo-image-hosting/services/flag_handle"
 	"log"
 	"os/exec"
 	"runtime"
 )
 
-func init()  {
+func init() {
 	port := flag.String("port", "2047", "本地监听的端口")
 	platform := flag.String("platform", "github", "平台名称，支持gitee/github")
 	token := flag.String("token", "", "Gitee/Github 的用户授权码")
@@ -40,11 +40,11 @@ func main() {
 	port := flag_handle.PORT
 	router := routes.InitRoute()
 
-	link := "http://127.0.0.1:"+port
-	log.Println("监听端口", link ," 请不要关闭终端")
+	link := "http://127.0.0.1:" + port
+	log.Println("监听端口", link, " 请不要关闭终端")
 	// 调用浏览器打开网页
 	if runtime.GOOS == "windows" {
-		exec.Command("cmd","/c","start", link).CombinedOutput()
+		exec.Command("cmd", "/c", "start", link).CombinedOutput()
 	} else {
 		// 没有测试环境，暂时不实现
 		//exec.Command("open", link).CombinedOutput() // macos
