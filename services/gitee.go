@@ -3,17 +3,16 @@ package services
 import (
 	"encoding/json"
 	"fmt"
-	"hezhiheng/repo-image-hosting/services/flag_handle"
 	"github.com/valyala/fasthttp"
+	"hezhizheng/repo-image-hosting/services/flag_handle"
 	"log"
 )
-
 
 type GiteeServe struct {
 	RepoInterface
 }
 
-func (serve *GiteeServe) Push(filename, content string) (string,string,string) {
+func (serve *GiteeServe) Push(filename, content string) (string, string, string) {
 	return PushGitee(filename, content)
 }
 
@@ -25,7 +24,7 @@ func (serve *GiteeServe) Del(filepath, sha string) string {
 	return DelFile(filepath, sha)
 }
 
-func PushGitee(filename, content string) (string,string,string) {
+func PushGitee(filename, content string) (string, string, string) {
 
 	url := "https://gitee.com/api/v5/repos/" + flag_handle.OWNER + "/" + flag_handle.REPO + "/contents/" + flag_handle.PATH + "/" + filename
 
@@ -83,18 +82,18 @@ func PushGitee(filename, content string) (string,string,string) {
 		}
 	}
 
-	return d,p,s
+	return d, p, s
 }
 
 func GetGiteeFiles() []map[string]interface{} {
 
-	url := "https://gitee.com/api/v5/repos/"+
-		flag_handle.OWNER+"/"+
-		flag_handle.REPO+
-		"/contents/"+
-		flag_handle.PATH+
-		"?access_token="+
-		flag_handle.TOKEN+"&ref="+flag_handle.BRANCH
+	url := "https://gitee.com/api/v5/repos/" +
+		flag_handle.OWNER + "/" +
+		flag_handle.REPO +
+		"/contents/" +
+		flag_handle.PATH +
+		"?access_token=" +
+		flag_handle.TOKEN + "&ref=" + flag_handle.BRANCH
 
 	// 初始化请求与响应
 	req := fasthttp.AcquireRequest()
@@ -128,7 +127,7 @@ func GetGiteeFiles() []map[string]interface{} {
 	return mapResult
 }
 
-func DelFile(filepath,sha string) string {
+func DelFile(filepath, sha string) string {
 
 	url := "https://gitee.com/api/v5/repos/" + flag_handle.OWNER + "/" + flag_handle.REPO + "/contents/" + filepath
 

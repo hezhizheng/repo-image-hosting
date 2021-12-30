@@ -4,9 +4,9 @@ import (
 	"encoding/json"
 	"fmt"
 	"github.com/valyala/fasthttp"
+	"hezhizheng/repo-image-hosting/services"
+	"hezhizheng/repo-image-hosting/services/flag_handle"
 	"log"
-	"hezhiheng/repo-image-hosting/services"
-	"hezhiheng/repo-image-hosting/services/flag_handle"
 )
 
 type GithubServe struct {
@@ -54,7 +54,6 @@ func Push(filename, content string) (string, string, string) {
 	args := make(map[string]string)
 	args["content"] = content
 	args["message"] = "upload pic for repo-image-hosting"
-	args["branch"] = flag_handle.BRANCH
 
 	jsonBytes, _ := json.Marshal(args)
 	req.SetBodyRaw(jsonBytes)
@@ -83,7 +82,7 @@ func Push(filename, content string) (string, string, string) {
 	if ok {
 		if mapResult["content"] != nil {
 			path := mapResult["content"].(map[string]interface{})["path"].(string)
-			d = "https://cdn.jsdelivr.net/gh/"+ flag_handle.OWNER + "/" +flag_handle.REPO + "@"+flag_handle.BRANCH+"/" + path
+			d = "https://cdn.jsdelivr.net/gh/" + flag_handle.OWNER + "/" + flag_handle.REPO + "@" + flag_handle.BRANCH + "/" + path
 			p = path
 			s = mapResult["content"].(map[string]interface{})["sha"].(string)
 		}
@@ -98,8 +97,7 @@ func GetFiles() []map[string]interface{} {
 		flag_handle.OWNER + "/" +
 		flag_handle.REPO +
 		"/contents/" +
-		flag_handle.PATH +
-		"?ref=" + flag_handle.BRANCH
+		flag_handle.PATH
 
 	req := fasthttp.AcquireRequest()
 	resp := fasthttp.AcquireResponse()
@@ -124,7 +122,7 @@ func GetFiles() []map[string]interface{} {
 	// 获取响应的数据实体
 	body := resp.Body()
 
-	//log.Println(string(body),url)
+	//log.Println(string(body), url)
 
 	var mapResult []map[string]interface{}
 
@@ -133,8 +131,8 @@ func GetFiles() []map[string]interface{} {
 		fmt.Println("JsonToMapDemo err: ", err)
 	}
 
-	for _, v := range mapResult{
-		v["download_url"] = "https://cdn.jsdelivr.net/gh/"+ flag_handle.OWNER + "/" +flag_handle.REPO + "@"+flag_handle.BRANCH+"/" + v["path"].(string)
+	for _, v := range mapResult {
+		v["download_url"] = "https://cdn.jsdelivr.net/gh/" + flag_handle.OWNER + "/" + flag_handle.REPO + "@" + flag_handle.BRANCH + "/" + v["path"].(string)
 	}
 	return mapResult
 }
@@ -166,7 +164,7 @@ func DelFile(filepath, sha string) string {
 	args := make(map[string]string)
 	args["sha"] = sha
 	args["message"] = "delete pic for repo-image-hosting"
-	args["branch"] = flag_handle.BRANCH
+	//args["branch"] = flag_handle.BRANCH
 
 	jsonBytes, _ := json.Marshal(args)
 	req.SetBodyRaw(jsonBytes)
@@ -178,6 +176,7 @@ func DelFile(filepath, sha string) string {
 
 	// 获取响应的数据实体
 	body := resp.Body()
+	log.Println(string(body))
 
 	return string(body)
 }

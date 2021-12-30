@@ -2,10 +2,10 @@ package routes
 
 import (
 	"github.com/gin-gonic/gin"
+	"hezhizheng/repo-image-hosting/controller"
+	"hezhizheng/repo-image-hosting/static"
+	"hezhizheng/repo-image-hosting/views"
 	"net/http"
-	"hezhiheng/repo-image-hosting/controller"
-	"hezhiheng/repo-image-hosting/static"
-	"hezhiheng/repo-image-hosting/views"
 )
 
 func InitRoute() *gin.Engine {

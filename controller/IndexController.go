@@ -1,22 +1,22 @@
 package controller
 
 import (
-	"hezhiheng/repo-image-hosting/services/connector"
-	"hezhiheng/repo-image-hosting/services/flag_handle"
 	"github.com/gin-gonic/gin"
+	"hezhizheng/repo-image-hosting/services/connector"
+	"hezhizheng/repo-image-hosting/services/flag_handle"
 	"net/http"
 )
 
 func Index(c *gin.Context) {
 	c.HTML(http.StatusOK, "index.html", gin.H{
-		"current_dir": flag_handle.OWNER+"/"+flag_handle.REPO+"/"+flag_handle.PATH,
-		"owner":flag_handle.OWNER,
-		"repo":flag_handle.REPO,
-		"platform":flag_handle.PLATFORM,
+		"current_dir": flag_handle.OWNER + "/" + flag_handle.REPO + "/" + flag_handle.PATH,
+		"owner":       flag_handle.OWNER,
+		"repo":        flag_handle.REPO,
+		"platform":    flag_handle.PLATFORM,
 	})
 }
 
-func Images(c *gin.Context)  {
+func Images(c *gin.Context) {
 	images := connector.RepoCreate().GetFiles()
 	c.JSON(http.StatusOK, gin.H{
 		"code":    0,
