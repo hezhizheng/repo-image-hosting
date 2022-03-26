@@ -24,25 +24,29 @@
 
 ## 使用
 用户可直接下载 [releases](https://github.com/hezhizheng/repo-image-hosting/releases) 文件启动即可，参数说明：（PS：尽量使用最新发布版本）
-![](https://cdn.jsdelivr.net/gh/hezhizheng/static-image-hosting@master/image-hosting/20210222093638_VUQZUKNZGAXXSXJI.png)
+![](https://hzz333.coding.net/p/show-demo/d/static-image-hosting/git/raw/master/image-hosting/20220327001545_NOOWYGIESYWUAUXL.png)
 
 ```
-./repo-image-hosting_windows_amd64.exe -h
-Usage of D:\phpstudy_pro\WWW\org\gitee-image-hosting\repo-image-hosting_windows_amd64.exe:
-  -branch string
-        仓库所属空间地址(企业、组织或个人的地址path) (default "hezhizheng")
+Usage of ./repo-image-hosting_windows_amd64.exe:
+  -branch string               
+        分支 (default "master")
+  -depotid string              
+        coding 仓库ID          
   -owner string
         仓库所属空间地址(企业、组织或个人的地址path) (default "hezhizheng")
   -path string
         文件的路径 (default "image-hosting")
   -platform string
-        平台名称，支持gitee/github (default "github")
+        平台名称，支持gitee/github/coding (default "github")
   -port string
         本地监听的端口 (default "2047")
+  -project string
+        coding 项目名称
   -repo string
         仓库路径(path) (default "static-image-hosting")
   -token string
-        Gitee/Github 的用户授权码
+        Gitee/Github/Coding 的用户授权码
+
 ```
 
 ```
@@ -57,6 +61,9 @@ gitee API 文档：https://gitee.com/api/v5/swagger#/getV5ReposOwnerRepoContents
 token获取(github)：https://github.com/settings/tokens/new
 
 github API 文档：https://docs.github.com/cn/rest/reference/repos#custom-media-types-for-repository-contents
+
+Coding 开放平台：https://help.coding.net/openapi
+
 
 自行编译
 ```
