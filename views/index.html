@@ -177,8 +177,8 @@
 ====================================================================== -->
 <div id="fine-uploader-manual-trigger"></div>
 
-<div class="gitee-images" align="center">
-    <h3><span style="color: rgb(255, 153, 0)">{{ .platform }}</span> ：{{ .current_dir }} 目录下的文件</h3>
+<div class="platform-images" align="center" data-platform="{{ .platform }}">
+    <h3><span style="color: rgb(255, 153, 0)" >{{ .platform }}</span> ：{{ .current_dir }} 目录下的文件</h3>
     <ul class="li-images">
 <!--        <li>-->
 <!--            <img onerror="handleErrorImg(this)" src="https://gitee.com/static/images/logo-black.svg?t=158106664">-->
@@ -224,6 +224,7 @@
                         "<i title='删除' data-img_path="+res.data.path+" data-sha="+res.data.sha+" onClick='handleDel(this)' style='color: #d9534f' class='fa fa-trash fa-2x delete'></i>" +
                         "</li>"
                     )
+                    hideCodingDel()
                 }
             },
             onAllComplete: function (success, fail) {
@@ -276,11 +277,19 @@
                         "</li>"
                     )
                 });
+                hideCodingDel()
             },
             complete: function(){
                 layer.close(loding);
             }
         });
+    }
+
+    function hideCodingDel() {
+        if ( $(".platform-images").data("platform") === "coding" )
+        {
+            $(".delete").hide()
+        }
     }
 
     function handleErrorImg(t){

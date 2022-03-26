@@ -2,14 +2,16 @@ package connector
 
 import (
 	"repo-image-hosting/services"
+	"repo-image-hosting/services/coding"
 	"repo-image-hosting/services/flag_handle"
 	"repo-image-hosting/services/github"
 )
 
 // 定义 serve 的映射关系
 var serveMap = map[string]services.RepoInterface{
-	"gitee":   &services.GiteeServe{},
+	"gitee":  &services.GiteeServe{},
 	"github": &github.GithubServe{},
+	"coding": &coding.CodingServe{},
 }
 
 func RepoCreate() services.RepoInterface {

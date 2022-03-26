@@ -1,11 +1,13 @@
 package flag_handle
 
 var (
-	PORT = ""
-	OWNER = ""
-	REPO = ""
-	PATH = ""
-	TOKEN = ""
+	PORT     = ""
+	OWNER    = ""
+	REPO     = ""
+	PATH     = ""
+	TOKEN    = ""
 	PLATFORM = ""
-	BRANCH = ""
+	BRANCH   = ""
+	DEPOTID  = -1
+	PROJECT  = ""
 )

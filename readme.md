@@ -1,10 +1,10 @@
 # repo-image-hosting 🐽
 
-> Github / Gitee 图床工具 (基于 Golang(Gin) 实现) [github地址](https://github.com/hezhizheng/repo-image-hosting)
+> Github / Coding / Gitee 图床工具 (基于 Golang(Gin) 实现) [github地址](https://github.com/hezhizheng/repo-image-hosting)
 
 ```
-还是用Gitee当图床算了，不然哪里有国内访问又快又免费又稳的图床服务提供......
-Github 也行，可以用jsdelivr加速
+利用 Github / Coding / Gitee 做图床（Github使用jsdelivr加速）
+还是用git仓库当图床算了，不然哪里有国内访问又快又免费又稳的图床服务提供......
 ```
 
 > PHP composer 包：[repo-storage](https://github.com/hezhizheng/repo-storage)
@@ -29,6 +29,8 @@ Github 也行，可以用jsdelivr加速
 ```
 ./repo-image-hosting_windows_amd64.exe -h
 Usage of D:\phpstudy_pro\WWW\org\gitee-image-hosting\repo-image-hosting_windows_amd64.exe:
+  -branch string
+        仓库所属空间地址(企业、组织或个人的地址path) (default "hezhizheng")
   -owner string
         仓库所属空间地址(企业、组织或个人的地址path) (default "hezhizheng")
   -path string
