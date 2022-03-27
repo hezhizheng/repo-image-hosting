@@ -14,7 +14,7 @@
 ![](https://cdn.learnku.com/uploads/images/202102/07/6843/8CY2HIkX5x.gif!large)
 
 ## 功能
-- 支持使用 Github / Gitee 作为图床工具
+- 支持使用 Github / Coding / Gitee 作为图床工具
 - github 使用 jsdelivr 加速
 - 支持使用指定分支(必须是仓库已存在的分支)
 - 一键启动，跨平台支持，运行只依赖编译后的二进制文件
