@@ -315,7 +315,7 @@ func cacheUserId(str string) bool {
 }
 
 func cacheGetUserId() int {
-	f, err := os.OpenFile("./"+_md5(flag_handle.TOKEN)+".cache", os.O_RDONLY, 0600)
+	f, err := os.OpenFile(_md5(flag_handle.TOKEN)+".cache", os.O_RDONLY, 0600)
 	defer f.Close()
 	if err != nil {
 		fmt.Println(err.Error())
