@@ -54,6 +54,14 @@ Usage of ./repo-image-hosting_windows_amd64.exe:
 实际参数替换成自己的就行(PS：请保证仓库已经存在默认分支master/main)
 ```
 
+## Coding 使用说明
+- coding 只提供获取文件跟上传文件的操作（官方文档没提供删除文件接口）
+- 参数 `depotid` `project` 在 `platform` 设置为`coding`时必填，完整参数参考如下：
+```
+// owner 为 coding 域名前缀，例：https://your-team.coding.net
+./repo-image-hosting_windows_amd64.exe -token xxxxxb0fqqqqqqq3ffyyyyy -platform coding -owner your-team -depotid 123456 -project show-demo -port 2048
+```
+
 token获取(gitee)：https://gitee.com/profile/personal_access_tokens/new
 
 gitee API 文档：https://gitee.com/api/v5/swagger#/getV5ReposOwnerRepoContents(Path)
