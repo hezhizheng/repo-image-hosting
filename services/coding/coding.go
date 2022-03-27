@@ -1,10 +1,14 @@
 package coding
 
 import (
+	"crypto/md5"
 	"encoding/json"
 	"fmt"
 	"github.com/valyala/fasthttp"
+	"io"
+	"io/ioutil"
 	"log"
+	"os"
 	"repo-image-hosting/services"
 	"repo-image-hosting/services/flag_handle"
 	"strconv"
@@ -188,6 +192,12 @@ func DelFile(filepath, sha string) string {
 func getUserId() int {
 	mutex2.Lock()
 	defer mutex2.Unlock()
+
+	cacheUId := cacheGetUserId()
+	if cacheUId > 0 {
+		return cacheUId
+	}
+
 	url := "https://e.coding.net/open-api"
 
 	req := fasthttp.AcquireRequest()
@@ -231,6 +241,8 @@ func getUserId() int {
 	id := mapResult["Response"].(map[string]interface{})["User"].(map[string]interface{})["Id"].(float64)
 
 	stringId := strconv.FormatFloat(id, 'f', -1, 64)
+
+	cacheUserId(stringId)
 
 	// string转成int：
 	intId, _ := strconv.Atoi(stringId)
@@ -285,4 +297,42 @@ func lastCommitSha() string {
 	}
 	Sha := mapResult["Response"].(map[string]interface{})["Commits"].([]interface{})[0].(map[string]interface{})["Sha"].(string)
 	return Sha
+}
+
+func cacheUserId(str string) bool {
+	f, err := os.Create("./" + _md5(flag_handle.TOKEN) + ".cache")
+	defer f.Close()
+	if err != nil {
+		fmt.Println(err.Error())
+		return false
+	} else {
+		_, err2 := f.Write([]byte(str))
+		if err2 != nil {
+			return false
+		}
+		return true
+	}
+}
+
+func cacheGetUserId() int {
+	f, err := os.OpenFile("./"+_md5(flag_handle.TOKEN)+".cache", os.O_RDONLY, 0600)
+	defer f.Close()
+	if err != nil {
+		fmt.Println(err.Error())
+		return 0
+	} else {
+		contentByte, err2 := ioutil.ReadAll(f)
+		if err2 != nil {
+			fmt.Println(err2.Error())
+			return 0
+		}
+		intId, _ := strconv.Atoi(string(contentByte))
+		return intId
+	}
+}
+
+func _md5(str string) string {
+	h := md5.New()
+	io.WriteString(h, str)
+	return fmt.Sprintf("%x", h.Sum(nil))
 }
