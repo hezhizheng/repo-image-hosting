@@ -83,7 +83,7 @@ func Push(filename, content string) (string, string, string) {
 	if ok {
 		if mapResult["content"] != nil {
 			path := mapResult["content"].(map[string]interface{})["path"].(string)
-			d = "https://cdn.jsdelivr.net/gh/"+ flag_handle.OWNER + "/" +flag_handle.REPO + "@"+flag_handle.BRANCH+"/" + path
+			d = "https://fastly.jsdelivr.net/gh/" + flag_handle.OWNER + "/" + flag_handle.REPO + "@" + flag_handle.BRANCH + "/" + path
 			p = path
 			s = mapResult["content"].(map[string]interface{})["sha"].(string)
 		}
@@ -130,11 +130,11 @@ func GetFiles() []map[string]interface{} {
 
 	err := json.Unmarshal(body, &mapResult)
 	if err != nil {
-		fmt.Println("JsonToMapDemo err: ", err)
+		fmt.Println("JsonToMapDemo err: ", err, string(body))
 	}
 
-	for _, v := range mapResult{
-		v["download_url"] = "https://cdn.jsdelivr.net/gh/"+ flag_handle.OWNER + "/" +flag_handle.REPO + "@"+flag_handle.BRANCH+"/" + v["path"].(string)
+	for _, v := range mapResult {
+		v["download_url"] = "https://fastly.jsdelivr.net/gh/" + flag_handle.OWNER + "/" + flag_handle.REPO + "@" + flag_handle.BRANCH + "/" + v["path"].(string)
 	}
 	return mapResult
 }

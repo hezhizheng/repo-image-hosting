@@ -347,9 +347,95 @@
 
     new ClipboardJS('.copy');
 
-    function handleCopy(t)
+    function GetUrlRelativePath(url)
     {
-        layer.msg("链接 "+$(t).attr("data-img_url")+" 已复制成功",{time: 1500})
+        var arrUrl = url.split("//");
+
+        var start = arrUrl[1].indexOf("/");
+        var relUrl = arrUrl[1].substring(start);//stop省略，截取从start开始到结尾的所有字符
+
+        if(relUrl.indexOf("?") != -1){
+            relUrl = relUrl.split("?")[0];
+        }
+        return relUrl;
+    }
+
+    function handleCopy(t) {
+        if ( $(".platform-images").data("platform") === "github" )
+        {
+            let img_url = $(t).attr("data-img_url")
+
+            let cdn_host = [
+                'https://cdn.jsdelivr.net',
+                'https://fastly.jsdelivr.net',
+                'https://gcore.jsdelivr.net',
+                'https://cdn.zenless.top',
+                'https://testingcf.jsdelivr.net',
+                'https://test1.jsdelivr.net'
+            ]
+
+            let _li = ""
+            $.each(cdn_host, function(index, value) {
+                // alert(index + ': ' + value);
+                let cdn_url = value + GetUrlRelativePath(img_url)
+                _li += `
+                   <li>
+                   <span style="width: 1040px;display: inline-block " >
+                   <a href="${cdn_url}" target="_blank">${cdn_url}</a>
+                   </span>
+                   <span style="width: 50px;display: inline-block ">
+                   <i data-clipboard-text="${cdn_url}" onclick="copyHandle(this)" class='fa fa-copy fa-1x copy'></i>
+                   &nbsp;
+                   <i onclick="eye(this)" data-img_url="${cdn_url}" class="fa fa-eye" aria-hidden="true"></i>
+</span>
+
+                   </li>
+                   </br>
+                `
+            });
+
+            let url_list = `
+        <ul>
+        ${_li}
+</ul>
+        `
+            layer.open({
+                title: "可选节点",
+                type:1,
+                content: url_list,
+                // area: '1280px'
+            });
+        }else{
+            layer.msg("链接 "+$(t).attr("data-img_url")+" 已复制成功",{time: 1500})
+        }
+    }
+
+    function copyHandle(t)
+    {
+        layer.msg("链接 "+$(t).attr("data-clipboard-text")+" 已复制成功",{time: 2000})
+    }
+
+    function eye(t)
+    {
+        let img_url = $(t).attr("data-img_url")
+
+        layer.photos({
+            photos: {
+                "title": "", //相册标题
+                "id": 123, //相册id
+                "start": 0, //初始显示的图片序号，默认0
+                "data": [   //相册包含的图片，数组格式
+                    {
+                        "alt": img_url,
+                        "pid": Math.random(), //图片id
+                        "src": img_url, //原图地址
+                        "thumb": img_url //缩略图地址
+                    }
+                ]
+            }
+            // ,anim: 5 //0-6的选择，指定弹出图片动画类型，默认随机（请注意，3.0之前的版本用shift参数）
+        });
+        // layer.msg("链接 "+$(t).attr("data-clipboard-text")+" 已复制成功",{time: 2000})
     }
 </script>
 </body>

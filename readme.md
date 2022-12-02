@@ -13,6 +13,12 @@
 ![](https://cdn.learnku.com/uploads/images/202102/07/6843/crh7ytVwiz.png)
 ![](https://cdn.learnku.com/uploads/images/202102/07/6843/8CY2HIkX5x.gif!large)
 
+
+## 注意！！！
+coding 、gitee 由于众所周知的原因这里不推荐使用，请优先使用 github 作为图床工具，已收集多个在大陆地区可访问节点，感谢 [jsdelivr-auto-fallback](https://github.com/PipecraftNet/jsdelivr-auto-fallback)
+
+![](./images/copy.png)
+ 
 ## 功能
 - 支持使用 Github / Coding / Gitee 作为图床工具
 - github 使用 jsdelivr 加速
@@ -82,12 +88,6 @@ gox -osarch="darwin/amd64" -ldflags "-s -w" -gcflags="all=-trimpath=${PWD}" -asm
 
 gox -osarch="linux/amd64" -ldflags "-s -w" -gcflags="all=-trimpath=${PWD}" -asmflags="all=-trimpath=${PWD}"
 ```
-
-
-## 关于Gitee限制图片大于1M访问的处理方案
-- 使用第三方图片压缩工具进行压缩，之后再进行上传。推荐 [compressjpeg](https://compressjpeg.com/zh/)
-- 启用Gitee的pages功能(非付费用户上传图片之后需要手动进行pages服务的部署)，需要替换域名为pages的域名。
-
 
 ## License
 [MIT](./LICENSE.txt)

@@ -18,7 +18,7 @@ func init() {
 	owner := flag.String("owner", "hezhizheng", "仓库所属空间地址(企业、组织或个人的地址path)")
 	repo := flag.String("repo", "static-image-hosting", "仓库路径(path)")
 	path := flag.String("path", "image-hosting", "文件的路径")
-	branch := flag.String("branch", "master", "分支")
+	branch := flag.String("branch", "main", "分支")
 	DEPOTID := flag.String("depotid", "", "coding 仓库ID")
 	PROJECT := flag.String("project", "", "coding 项目名称")
 	flag.Parse()
