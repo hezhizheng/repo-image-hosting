@@ -136,6 +136,9 @@ func GetFiles() []map[string]interface{} {
 	for _, v := range mapResult {
 		v["download_url"] = "https://fastly.jsdelivr.net/gh/" + flag_handle.OWNER + "/" + flag_handle.REPO + "@" + flag_handle.BRANCH + "/" + v["path"].(string)
 	}
+
+	mapResult = services.ArrayReverse(mapResult)
+
 	return mapResult
 }
 

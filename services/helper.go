@@ -30,4 +30,16 @@ func GetRandomString(n int) string {
 	return string(bytes)
 }
 
+func ArrayReverse(s []map[string]interface{}) []map[string]interface{} {
+	for i, j := 0, len(s)-1; i < j; i, j = i+1, j-1 {
+		s[i], s[j] = s[j], s[i]
+	}
+	return s
+}
 
+//func ArrayReverseAny[A ~[]map[any]interface{} | ~[]interface{}](s A) A {
+//	for i, j := 0, len(s)-1; i < j; i, j = i+1, j-1 {
+//		s[i], s[j] = s[j], s[i]
+//	}
+//	return s
+//}
