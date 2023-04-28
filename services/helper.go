@@ -6,6 +6,7 @@ import (
 	"io/ioutil"
 	"math/rand"
 	"os"
+	"reflect"
 	"time"
 )
 
@@ -43,3 +44,21 @@ func ArrayReverse(s []map[string]interface{}) []map[string]interface{} {
 //	}
 //	return s
 //}
+
+func ArrayReverseAny[A ~[]interface{} | ~[]map[string]interface{}](s A) A {
+	v := reflect.ValueOf(s) // 获取值的反射对象
+	kind := v.Kind()        // 获取反射对象的类型
+
+	if kind != reflect.Slice { // 如果不是切片类型则返回原值
+		return s
+	}
+
+	length := v.Len()                                                // 获取切片长度
+	reversed := reflect.MakeSlice(reflect.TypeOf(s), length, length) // 创建一个新的切片，用于存储反转后的元素
+
+	for i, j := 0, length-1; i < length; i, j = i+1, j-1 {
+		reversed.Index(i).Set(v.Index(j)) // 使用反射设置切片中的元素
+	}
+
+	return reversed.Interface().(A) // 将反转后的切片转换回 A 类型并返回
+}
