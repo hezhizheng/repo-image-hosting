@@ -1,26 +1,26 @@
 # repo-image-hosting 🐽
 
-> Github / Coding / Gitee 图床工具 (基于 Golang(Gin) 实现) [github地址](https://github.com/hezhizheng/repo-image-hosting)
+> Github 图床工具 (基于 Golang(Gin) 实现) [github地址](https://github.com/hezhizheng/repo-image-hosting)
 
 ```
-利用 Github / Coding / Gitee 做图床（Github使用jsdelivr加速）
+利用 Github 做图床（Github使用jsdelivr加速）
 还是用git仓库当图床算了，不然哪里有国内访问又快又免费又稳的图床服务提供......
 ```
 
 > PHP composer 包：[repo-storage](https://github.com/hezhizheng/repo-storage)
 
 ## 页面
-![](https://cdn.learnku.com/uploads/images/202102/07/6843/crh7ytVwiz.png)
-![](https://cdn.learnku.com/uploads/images/202102/07/6843/8CY2HIkX5x.gif!large)
+![](https://cdn.jsdmirror.com/gh/hezhizheng/static-image-hosting@main/image-hosting/20260812013811_QXITKCXPIXUQWDHK.png)
+![](https://cdn.jsdmirror.com/gh/hezhizheng/static-image-hosting@main/image-hosting/20260812013802_XOEWQJBABRUZDVLE.gif)
 
 
 ## 注意！！！
-coding 、gitee 由于众所周知的原因这里不推荐使用，请优先使用 github 作为图床工具，已收集多个在大陆地区可访问节点，感谢 [jsdelivr-auto-fallback](https://github.com/PipecraftNet/jsdelivr-auto-fallback)
+coding 、gitee 由于众所周知的原因这里不推荐使用且已不再维护，请优先使用 github 作为图床工具，已收集多个在大陆地区可访问节点，感谢 [jsdelivr-auto-fallback](https://github.com/PipecraftNet/jsdelivr-auto-fallback)
 
 ![](./images/copy.png)
  
 ## 功能
-- 支持使用 Github / Coding / Gitee 作为图床工具
+- 支持使用 Github 作为图床工具
 - github 使用 jsdelivr 加速
 - 支持使用指定分支(必须是仓库已存在的分支)
 - 一键启动，跨平台支持，运行只依赖编译后的二进制文件
@@ -30,7 +30,6 @@ coding 、gitee 由于众所周知的原因这里不推荐使用，请优先使�
 
 ## 使用
 用户可直接下载 [releases](https://github.com/hezhizheng/repo-image-hosting/releases) 文件启动即可，参数说明：（PS：尽量使用最新发布版本）
-![](https://hzz333.coding.net/p/show-demo/d/static-image-hosting/git/raw/master/image-hosting/20220327001545_NOOWYGIESYWUAUXL.png)
 
 ```
 Usage of ./repo-image-hosting_windows_amd64.exe:

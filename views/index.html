@@ -113,6 +113,13 @@
             width: 60%;
         }
 
+        .li-images {
+            list-style: none;
+            padding: 0;
+            margin: 0;
+            overflow: hidden;
+        }
+
         .li-images > li {
             list-style: none;
             float: left;
@@ -167,7 +174,7 @@
 
 <div align="center" class="">
     <h1>
-        <a href="https://hzz.cool" target="_blank" style="text-decoration:none;color: rgb(255, 153, 0)">
+        <a href="https://hzzio.top" target="_blank" style="text-decoration:none;color: rgb(255, 153, 0)">
             Repo-Image-Hosting 🐽
         </a>
     </h1>
@@ -186,6 +193,12 @@
 <!--            <i title="删除" data-sha="" onclick="handleDel(this)" style="color: #d9534f" class="fa fa-trash fa-2x delete"></i>-->
 <!--        </li>-->
     </ul>
+    <div align="center" style="margin: 20px 0; clear: both;">
+        <button id="load-more" type="button"
+                style="display:none; background-color:#00ABC7; color:white; border:none; border-radius:4px; padding:10px 36px; font-size:14px; cursor:pointer;">
+            加载更多
+        </button>
+    </div>
 </div>
 
 <!-- Your code to create an instance of Fine Uploader and bind to the DOM/template
@@ -219,7 +232,7 @@
                 if (res.code == 200) {
                     $(".li-images").prepend(
                         "<li>" +
-                        "<img data-img_path="+res.data.path+" onError=\"handleErrorImg(this)\" src=" + res.data.url + ">" +
+                        "<img data-img_path="+res.data.path+" loading=\"lazy\" onError=\"handleErrorImg(this)\" src=" + res.data.url + ">" +
                         "<i title='复制图片链接' data-clipboard-text="+res.data.url+" data-img_url="+res.data.url+" onClick='handleCopy(this)' style='color: rgb(255, 153, 0)' class='fa fa-copy fa-2x copy'></i>" +
                         "<i title='删除' data-img_path="+res.data.path+" data-sha="+res.data.sha+" onClick='handleDel(this)' style='color: #d9534f' class='fa fa-trash fa-2x delete'></i>" +
                         "</li>"
@@ -242,25 +255,77 @@
         $('#fine-uploader-manual-trigger').fineUploader('uploadStoredFiles');
     });
 
-    loadImages()
+    var pageSize = 30;
+    var currentPage = 0;
+    var loadingCount = 0;
+    var loadingLayerIdx = null;
+    var loadingTimer = null;
 
-    var loding = layer.msg('数据加载中...', {
-        icon: 16
-        ,shade: 0.01
-        ,time: 0
-    });
+    function showLoading() {
+        if (loadingCount === 0) {
+            loadingLayerIdx = layer.msg('数据加载中...', {icon: 16, time: 0});
+        }
+        loadingCount++;
+        // 兜底:无论请求结果如何,40s 后强制关闭 loading
+        clearTimeout(loadingTimer);
+        loadingTimer = setTimeout(function () {
+            loadingCount = 0;
+            forceHideLoading();
+        }, 40000);
+    }
 
-    function loadImages() {
+    function hideLoading() {
+        loadingCount--;
+        if (loadingCount <= 0) {
+            loadingCount = 0;
+            clearTimeout(loadingTimer);
+            forceHideLoading();
+        }
+    }
+
+    function forceHideLoading() {
+        if (loadingLayerIdx != null) {
+            var idx = loadingLayerIdx;
+            var tryClose = function (remaining) {
+                if (document.getElementById('layui-layer' + idx)) {
+                    layer.close(idx);
+                    if (loadingLayerIdx === idx) {
+                        loadingLayerIdx = null;
+                    }
+                } else if (remaining > 0) {
+                    setTimeout(function () { tryClose(remaining - 1); }, 20);
+                } else {
+                    // 多次重试后仍找不到 DOM,直接清引用避免死锁
+                    if (loadingLayerIdx === idx) {
+                        loadingLayerIdx = null;
+                    }
+                }
+            };
+            tryClose(10);
+        }
+    }
+
+    function loadImages(page) {
+        showLoading();
         $.ajax({
             url: "/images",
             type: "GET",
-            data: {},
-            beforeSend:function (){
-                loding
+            data: {
+                page: page,
+                pageSize: pageSize
+            },
+            cache: false,
+            timeout: 30000,
+            error: function (xhr, status, err) {
+                console.log("loadImages error", status, err)
+                hideLoading();
+                layer.msg("请求超时或失败，请刷新重试",{time: 2000})
             },
             success: function (d) {
+                // 进入成功回调立刻关闭 loading,避免 success 抛异常导致 complete 被跳过
+                hideLoading();
 
-                if ( d.data.images == null )
+                if ( !d || d.data == null || d.data.images == null )
                 {
                     //alert("token配置有误，请检查")
                     //console.log("配置错误，或当前目录不存在")
@@ -268,22 +333,37 @@
                     return false;
                 }
 
+                currentPage = d.data.page;
+
                 $.each(d.data.images, function (index, value) {
                     $(".li-images").append(
                         "<li>" +
-                        "<img data-img_path="+value.path+"  onError=\"handleErrorImg(this)\" src=" + value.download_url + ">" +
+                        "<img data-img_path="+value.path+" loading=\"lazy\" onError=\"handleErrorImg(this)\" src=" + value.download_url + ">" +
                         "<i title='复制图片链接' data-clipboard-text="+value.download_url+" data-img_url="+value.download_url+" onClick='handleCopy(this)' style='color: rgb(255, 153, 0)' class='fa fa-copy fa-2x copy'></i>" +
                         "<i title='删除' data-img_path="+value.path+" data-sha="+value.sha+" onClick='handleDel(this)' style='color: #d9534f' class='fa fa-trash fa-2x delete'></i>" +
                         "</li>"
                     )
                 });
+
+                if (d.data.hasMore) {
+                    $("#load-more").show();
+                } else {
+                    $("#load-more").hide();
+                }
                 hideCodingDel()
             },
             complete: function(){
-                layer.close(loding);
+                hideLoading();
             }
         });
     }
+
+    // 首次加载
+    loadImages(1);
+
+    $("#load-more").click(function () {
+        loadImages(currentPage + 1);
+    });
 
     function hideCodingDel() {
         if ( $(".platform-images").data("platform") === "coding" )
@@ -322,6 +402,8 @@
     function handleDel(t)
     {
         layer.confirm("是否删除？", { title:'提示'}, function(index){
+            layer.close(index);
+            var delLoading = layer.load(1, {shade: 0.3});
             $.ajax({
                 url: "/delete",
                 type: "POST",
@@ -334,12 +416,23 @@
                         $(t).parent().remove()
                         layer.msg("已删除",{time: 1500})
                     }else{
-                        layer.msg("删除失败")
-                        return false;
+                        layer.msg("删除失败",{time: 2000})
                     }
                 },
+                error: function () {
+                    layer.msg("删除请求失败，请重试",{time: 2000})
+                },
+                complete: function(){
+                    var tryClose = function(remaining){
+                        if (document.getElementById('layui-layer' + delLoading)) {
+                            layer.close(delLoading);
+                        } else if (remaining > 0) {
+                            setTimeout(function(){ tryClose(remaining - 1); }, 20);
+                        }
+                    };
+                    tryClose(10);
+                }
             });
-            layer.close(index);
         },function (){ // 取消操作
             //console.log("取消操作")
         });
@@ -366,12 +459,11 @@
             let img_url = $(t).attr("data-img_url")
 
             let cdn_host = [
-                'https://cdn.jsdelivr.net',
+                'https://cdn.jsdmirror.com',
                 'https://fastly.jsdelivr.net',
+                'https://cdn.jsdelivr.net',
                 'https://gcore.jsdelivr.net',
-                'https://cdn.zenless.top',
                 'https://testingcf.jsdelivr.net',
-                'https://test1.jsdelivr.net'
             ]
 
             let _li = ""

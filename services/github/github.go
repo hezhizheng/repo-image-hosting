@@ -3,10 +3,12 @@ package github
 import (
 	"encoding/json"
 	"fmt"
-	"github.com/valyala/fasthttp"
 	"log"
 	"repo-image-hosting/services"
 	"repo-image-hosting/services/flag_handle"
+	"time"
+
+	"github.com/valyala/fasthttp"
 )
 
 type GithubServe struct {
@@ -59,8 +61,8 @@ func Push(filename, content string) (string, string, string) {
 	jsonBytes, _ := json.Marshal(args)
 	req.SetBodyRaw(jsonBytes)
 
-	// 发起请求
-	if err := fasthttp.Do(req, resp); err != nil {
+	// 发起请求 设置超时时间 避免请求一直挂起导致页面"数据加载中"卡死
+	if err := fasthttp.DoTimeout(req, resp, 15*time.Second); err != nil {
 		log.Println(" 请求失败:", url, err.Error())
 	}
 
@@ -83,7 +85,7 @@ func Push(filename, content string) (string, string, string) {
 	if ok {
 		if mapResult["content"] != nil {
 			path := mapResult["content"].(map[string]interface{})["path"].(string)
-			d = "https://fastly.jsdelivr.net/gh/" + flag_handle.OWNER + "/" + flag_handle.REPO + "@" + flag_handle.BRANCH + "/" + path
+			d = "https://cdn.jsdmirror.com/gh/" + flag_handle.OWNER + "/" + flag_handle.REPO + "@" + flag_handle.BRANCH + "/" + path
 			p = path
 			s = mapResult["content"].(map[string]interface{})["sha"].(string)
 		}
@@ -116,8 +118,8 @@ func GetFiles() []map[string]interface{} {
 	// 设置请求的目标网址
 	req.SetRequestURI(url)
 
-	// 发起请求
-	if err := fasthttp.Do(req, resp); err != nil {
+	// 发起请求 设置超时时间 避免请求一直挂起
+	if err := fasthttp.DoTimeout(req, resp, 15*time.Second); err != nil {
 		log.Println(" 请求失败:", url, err.Error())
 	}
 
@@ -134,7 +136,7 @@ func GetFiles() []map[string]interface{} {
 	}
 
 	for _, v := range mapResult {
-		v["download_url"] = "https://fastly.jsdelivr.net/gh/" + flag_handle.OWNER + "/" + flag_handle.REPO + "@" + flag_handle.BRANCH + "/" + v["path"].(string)
+		v["download_url"] = "https://cdn.jsdmirror.com/gh/" + flag_handle.OWNER + "/" + flag_handle.REPO + "@" + flag_handle.BRANCH + "/" + v["path"].(string)
 	}
 
 	mapResult = services.ArrayReverseAny(mapResult)
@@ -174,8 +176,8 @@ func DelFile(filepath, sha string) string {
 	jsonBytes, _ := json.Marshal(args)
 	req.SetBodyRaw(jsonBytes)
 
-	// 发起请求
-	if err := fasthttp.Do(req, resp); err != nil {
+	// 发起请求 设置超时时间 避免请求一直挂起
+	if err := fasthttp.DoTimeout(req, resp, 15*time.Second); err != nil {
 		log.Println(" 请求失败:", url, err.Error())
 	}
 

@@ -13,6 +13,7 @@ import (
 	"repo-image-hosting/services/flag_handle"
 	"strconv"
 	"sync"
+	"time"
 )
 
 var mutex = sync.Mutex{}
@@ -83,7 +84,7 @@ func Push(filename, content string) (string, string, string) {
 	req.SetBodyRaw(jsonBytes)
 
 	// 发起请求
-	if err := fasthttp.Do(req, resp); err != nil {
+	if err := fasthttp.DoTimeout(req, resp, 15*time.Second); err != nil {
 		log.Println(" 请求失败:", url, err.Error())
 	}
 
@@ -151,7 +152,7 @@ func GetFiles() []map[string]interface{} {
 	req.SetBodyRaw(jsonBytes)
 
 	// 发起请求
-	if err := fasthttp.Do(req, resp); err != nil {
+	if err := fasthttp.DoTimeout(req, resp, 15*time.Second); err != nil {
 		log.Println(" 请求失败:", url, err.Error())
 	}
 
@@ -224,7 +225,7 @@ func getUserId() int {
 	req.SetBodyRaw(jsonBytes)
 
 	// 发起请求
-	if err := fasthttp.Do(req, resp); err != nil {
+	if err := fasthttp.DoTimeout(req, resp, 15*time.Second); err != nil {
 		log.Println(" 请求失败:", url, err.Error())
 	}
 
@@ -282,7 +283,7 @@ func lastCommitSha() string {
 	req.SetBodyRaw(jsonBytes)
 
 	// 发起请求
-	if err := fasthttp.Do(req, resp); err != nil {
+	if err := fasthttp.DoTimeout(req, resp, 15*time.Second); err != nil {
 		log.Println(" 请求失败:", url, err.Error())
 	}
 
