@@ -19,7 +19,7 @@ func (serve *GithubServe) Push(filename, content string) (string, string, string
 	return Push(filename, content)
 }
 
-func (serve *GithubServe) GetFiles() []map[string]interface{} {
+func (serve *GithubServe) GetFiles() ([]map[string]interface{}, error) {
 	return GetFiles()
 }
 
@@ -94,7 +94,7 @@ func Push(filename, content string) (string, string, string) {
 	return d, p, s
 }
 
-func GetFiles() []map[string]interface{} {
+func GetFiles() ([]map[string]interface{}, error) {
 	// 初始化请求与响应
 	url := "https://api.github.com/repos/" +
 		flag_handle.OWNER + "/" +
@@ -121,6 +121,11 @@ func GetFiles() []map[string]interface{} {
 	// 发起请求 设置超时时间 避免请求一直挂起
 	if err := fasthttp.DoTimeout(req, resp, 15*time.Second); err != nil {
 		log.Println(" 请求失败:", url, err.Error())
+		return nil, fmt.Errorf("github 接口请求失败: %v", err)
+	}
+
+	if resp.StatusCode() != fasthttp.StatusOK {
+		return nil, fmt.Errorf("github 接口返回异常状态码: %d, body: %s", resp.StatusCode(), string(resp.Body()))
 	}
 
 	// 获取响应的数据实体
@@ -130,18 +135,22 @@ func GetFiles() []map[string]interface{} {
 
 	var mapResult []map[string]interface{}
 
-	err := json.Unmarshal(body, &mapResult)
-	if err != nil {
+	if err := json.Unmarshal(body, &mapResult); err != nil {
 		fmt.Println("JsonToMapDemo err: ", err, string(body))
+		return nil, fmt.Errorf("github 返回数据解析失败: %v", err)
 	}
 
 	for _, v := range mapResult {
-		v["download_url"] = "https://cdn.jsdmirror.com/gh/" + flag_handle.OWNER + "/" + flag_handle.REPO + "@" + flag_handle.BRANCH + "/" + v["path"].(string)
+		filePath, ok := v["path"].(string)
+		if !ok {
+			continue
+		}
+		v["download_url"] = "https://cdn.jsdmirror.com/gh/" + flag_handle.OWNER + "/" + flag_handle.REPO + "@" + flag_handle.BRANCH + "/" + filePath
 	}
 
 	mapResult = services.ArrayReverseAny(mapResult)
 
-	return mapResult
+	return mapResult, nil
 }
 
 func DelFile(filepath, sha string) string {

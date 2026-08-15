@@ -29,7 +29,7 @@ func (serve *CodingServe) Push(filename, content string) (string, string, string
 	return Push(filename, content)
 }
 
-func (serve *CodingServe) GetFiles() []map[string]interface{} {
+func (serve *CodingServe) GetFiles() ([]map[string]interface{}, error) {
 	return GetFiles()
 }
 
@@ -105,21 +105,21 @@ func Push(filename, content string) (string, string, string) {
 	picSha := ""
 
 	// todo 这里存在还没提交就获取了文件的情况？
-	files := GetFiles()
+	files, _ := GetFiles()
 	flen := len(files)
 
 	if flen > 0 { // 取最新一条
 		last := files[flen-1]
-		picUrl = last["download_url"].(string)
-		picPath = last["Path"].(string)
-		picSha = last["Sha"].(string)
+		picUrl, _ = last["download_url"].(string)
+		picPath, _ = last["Path"].(string)
+		picSha, _ = last["Sha"].(string)
 	}
 
 	return picUrl, picPath, picSha
 
 }
 
-func GetFiles() []map[string]interface{} {
+func GetFiles() ([]map[string]interface{}, error) {
 	mutex1.Lock()
 	defer mutex1.Unlock()
 
@@ -154,6 +154,11 @@ func GetFiles() []map[string]interface{} {
 	// 发起请求
 	if err := fasthttp.DoTimeout(req, resp, 15*time.Second); err != nil {
 		log.Println(" 请求失败:", url, err.Error())
+		return nil, fmt.Errorf("coding 接口请求失败: %v", err)
+	}
+
+	if resp.StatusCode() != fasthttp.StatusOK {
+		return nil, fmt.Errorf("coding 接口返回异常状态码: %d, body: %s", resp.StatusCode(), string(resp.Body()))
 	}
 
 	// 获取响应的数据实体
@@ -163,17 +168,30 @@ func GetFiles() []map[string]interface{} {
 
 	var mapResult map[string]interface{}
 
-	err := json.Unmarshal(body, &mapResult)
-	if err != nil {
+	if err := json.Unmarshal(body, &mapResult); err != nil {
 		fmt.Println("JsonToMapDemo err: ", err)
+		return nil, fmt.Errorf("coding 返回数据解析失败: %v", err)
 	}
 
-	items := mapResult["Response"].(map[string]interface{})["Items"].([]interface{})
+	respData, ok := mapResult["Response"].(map[string]interface{})
+	if !ok {
+		return nil, fmt.Errorf("coding 返回数据格式异常: %s", string(body))
+	}
+
+	items, ok := respData["Items"].([]interface{})
+	if !ok {
+		return nil, fmt.Errorf("coding 返回数据缺少 Items 字段: %s", string(body))
+	}
 
 	for _, v := range items { //hzz333
-		v.(map[string]interface{})["download_url"] = "https://" + flag_handle.OWNER + ".coding.net" + "/p/" + flag_handle.PROJECT + "/d/" + flag_handle.REPO + "/git/raw/" + flag_handle.BRANCH + "/" + v.(map[string]interface{})["Path"].(string)
-		v.(map[string]interface{})["name"] = v.(map[string]interface{})["Name"]
-		v.(map[string]interface{})["sha"] = v.(map[string]interface{})["Sha"]
+		m, ok := v.(map[string]interface{})
+		if !ok {
+			continue
+		}
+		p, _ := m["Path"].(string)
+		m["download_url"] = "https://" + flag_handle.OWNER + ".coding.net" + "/p/" + flag_handle.PROJECT + "/d/" + flag_handle.REPO + "/git/raw/" + flag_handle.BRANCH + "/" + p
+		m["name"] = m["Name"]
+		m["sha"] = m["Sha"]
 	}
 
 	var mapResult2 []map[string]interface{}
@@ -182,7 +200,7 @@ func GetFiles() []map[string]interface{} {
 
 	json.Unmarshal(c, &mapResult2)
 
-	return mapResult2
+	return mapResult2, nil
 }
 
 func DelFile(filepath, sha string) string {

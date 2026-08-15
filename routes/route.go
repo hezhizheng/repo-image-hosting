@@ -11,6 +11,8 @@ import (
 func InitRoute() *gin.Engine {
 	//router := gin.Default()
 	router := gin.New()
+	// 兜底: 避免 handler 内 panic 导致整个程序退出
+	router.Use(gin.Recovery())
 
 	//加载模板文件
 	router.SetHTMLTemplate(views.GoTpl)

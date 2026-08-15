@@ -1,7 +1,9 @@
 package controller
 
 import (
+	"fmt"
 	"github.com/gin-gonic/gin"
+	"log"
 	"net/http"
 	"os"
 	"path"
@@ -102,17 +104,21 @@ func ImageDel(c *gin.Context) {
 }
 
 // 缓存文件列表 避免每次刷新页面都请求一次远端仓库接口
-func getFilesCached() []map[string]interface{} {
+func getFilesCached() ([]map[string]interface{}, error) {
 	fileCacheLock.Lock()
 	if fileCache != nil && time.Since(fileCacheAt) < fileCacheAge {
 		files := fileCache
 		fileCacheLock.Unlock()
-		return files
+		return files, nil
 	}
 	fileCacheLock.Unlock()
 
 	// 网络请求在锁外执行 避免一个慢请求阻塞其他所有请求
-	files := connector.RepoCreate().GetFiles()
+	files, err := safeGetFiles()
+	if err != nil {
+		// 请求失败不缓存 避免把错误结果缓存起来
+		return nil, err
+	}
 
 	fileCacheLock.Lock()
 	defer fileCacheLock.Unlock()
@@ -120,7 +126,19 @@ func getFilesCached() []map[string]interface{} {
 		fileCache = files
 		fileCacheAt = time.Now()
 	}
-	return files
+	return files, nil
+}
+
+// 兜底 recover: 远端接口数据异常导致的 panic 不拖垮整个程序
+func safeGetFiles() (files []map[string]interface{}, err error) {
+	defer func() {
+		if r := recover(); r != nil {
+			err = fmt.Errorf("获取文件列表异常: %v", r)
+			log.Println(err)
+		}
+	}()
+	files, err = connector.RepoCreate().GetFiles()
+	return
 }
 
 func invalidateFileCache() {
@@ -130,7 +148,19 @@ func invalidateFileCache() {
 }
 
 func Images(c *gin.Context) {
-	images := getFilesCached()
+	images, err := getFilesCached()
+	if err != nil {
+		log.Println("Images 获取文件列表失败:", err)
+		c.JSON(http.StatusOK, gin.H{
+			"code":    1,
+			"success": false,
+			"message": err.Error(),
+			"data": map[string]interface{}{
+				"images": nil,
+			},
+		})
+		return
+	}
 
 	page, _ := strconv.Atoi(c.DefaultQuery("page", "1"))
 	pageSize, _ := strconv.Atoi(c.DefaultQuery("pageSize", "30"))

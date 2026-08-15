@@ -329,7 +329,8 @@
                 {
                     //alert("token配置有误，请检查")
                     //console.log("配置错误，或当前目录不存在")
-                    layer.msg("配置错误，或当前目录不存在",{time: 2000})
+                    var errMsg = (d && d.message) ? d.message : "配置错误，或当前目录不存在";
+                    layer.msg(errMsg,{time: 5000})
                     return false;
                 }
 

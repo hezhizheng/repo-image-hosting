@@ -17,7 +17,7 @@ func (serve *GiteeServe) Push(filename, content string) (string, string, string)
 	return PushGitee(filename, content)
 }
 
-func (serve *GiteeServe) GetFiles() []map[string]interface{} {
+func (serve *GiteeServe) GetFiles() ([]map[string]interface{}, error) {
 	return GetGiteeFiles()
 }
 
@@ -86,7 +86,7 @@ func PushGitee(filename, content string) (string, string, string) {
 	return d, p, s
 }
 
-func GetGiteeFiles() []map[string]interface{} {
+func GetGiteeFiles() ([]map[string]interface{}, error) {
 
 	url := "https://gitee.com/api/v5/repos/" +
 		flag_handle.OWNER + "/" +
@@ -113,6 +113,11 @@ func GetGiteeFiles() []map[string]interface{} {
 	// 发起请求
 	if err := fasthttp.DoTimeout(req, resp, 15*time.Second); err != nil {
 		log.Println(" 请求失败:", url, err.Error())
+		return nil, fmt.Errorf("gitee 接口请求失败: %v", err)
+	}
+
+	if resp.StatusCode() != fasthttp.StatusOK {
+		return nil, fmt.Errorf("gitee 接口返回异常状态码: %d, body: %s", resp.StatusCode(), string(resp.Body()))
 	}
 
 	// 获取响应的数据实体
@@ -120,12 +125,12 @@ func GetGiteeFiles() []map[string]interface{} {
 
 	var mapResult []map[string]interface{}
 
-	err := json.Unmarshal(body, &mapResult)
-	if err != nil {
+	if err := json.Unmarshal(body, &mapResult); err != nil {
 		fmt.Println("JsonToMapDemo err: ", err)
+		return nil, fmt.Errorf("gitee 返回数据解析失败: %v", err)
 	}
 
-	return mapResult
+	return mapResult, nil
 }
 
 func DelFile(filepath, sha string) string {
